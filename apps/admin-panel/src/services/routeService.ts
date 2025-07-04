@@ -127,30 +127,33 @@ class RouteService {
         console.warn('Usuario no autenticado, pero permitiendo acceso público a rutas')
       }
 
+      // Estrategia optimizada: aplicar solo un filtro principal por consulta
       const constraints: QueryConstraint[] = []
 
-      // Aplicar filtros
-      if (filters.origin) {
-        constraints.push(where('origin.city', '==', filters.origin))
-      }
-      if (filters.destination) {
-        constraints.push(where('destination.city', '==', filters.destination))
-      }
+      // Priorizar filtros: active > origin > destination > price
       if (filters.active !== undefined) {
         constraints.push(where('active', '==', filters.active))
-      }
-      if (filters.minPrice !== undefined) {
-        constraints.push(where('price', '>=', filters.minPrice))
-      }
-      if (filters.maxPrice !== undefined) {
-        constraints.push(where('price', '<=', filters.maxPrice))
-      }
-      if (filters.vehicleType) {
-        constraints.push(where('vehicleType', '==', filters.vehicleType))
+        constraints.push(orderBy('name'))
+      } else if (filters.origin) {
+        constraints.push(where('origin.city', '==', filters.origin))
+        constraints.push(orderBy('name'))
+      } else if (filters.destination) {
+        constraints.push(where('destination.city', '==', filters.destination))
+        constraints.push(orderBy('name'))
+      } else if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+        // Para filtros de precio, usar un rango
+        if (filters.minPrice !== undefined) {
+          constraints.push(where('price', '>=', filters.minPrice))
+        }
+        if (filters.maxPrice !== undefined) {
+          constraints.push(where('price', '<=', filters.maxPrice))
+        }
+        constraints.push(orderBy('price'))
+      } else {
+        // Consulta básica sin filtros
+        constraints.push(orderBy('name'))
       }
 
-      // Ordenar y limitar - usar un campo que siempre exista
-      constraints.push(orderBy('name'))
       constraints.push(limit(pageSize + 1)) // +1 para saber si hay más páginas
 
       // Paginación
@@ -165,7 +168,7 @@ class RouteService {
 
       console.log('Consulta exitosa, documentos encontrados:', querySnapshot.size)
 
-      const routes: Route[] = []
+      let routes: Route[] = []
       const docs: DocumentSnapshot[] = []
 
       querySnapshot.forEach((doc) => {
@@ -175,6 +178,9 @@ class RouteService {
           ...doc.data()
         } as Route)
       })
+
+      // Aplicar filtros adicionales en el cliente para consultas compuestas
+      routes = this.applyClientSideFilters(routes, filters)
 
       const hasMore = routes.length > pageSize
       if (hasMore) {
@@ -196,6 +202,8 @@ class RouteService {
         throw new Error('Sin permisos para acceder a las rutas. Verifica las reglas de Firestore.')
       } else if (error.code === 'unauthenticated') {
         throw new Error('Usuario no autenticado. Inicia sesión para continuar.')
+      } else if (error.code === 'failed-precondition' && error.message.includes('index')) {
+        throw new Error('Los índices de búsqueda se están creando. Intenta de nuevo en unos minutos.')
       } else {
         throw new Error(`Error al obtener rutas: ${error.message || 'Error desconocido'}`)
       }
@@ -359,7 +367,42 @@ class RouteService {
     }
   }
 
-
+  /**
+   * Aplicar filtros adicionales en el cliente
+   */
+  private applyClientSideFilters(routes: Route[], filters: RouteFilters): Route[] {
+    return routes.filter(route => {
+      // Filtrar por origen si no se usó como filtro principal
+      if (filters.origin && route.origin.city !== filters.origin) {
+        return false
+      }
+      
+      // Filtrar por destino si no se usó como filtro principal
+      if (filters.destination && route.destination.city !== filters.destination) {
+        return false
+      }
+      
+      // Filtrar por estado si no se usó como filtro principal
+      if (filters.active !== undefined && route.active !== filters.active) {
+        return false
+      }
+      
+      // Filtrar por precio si no se usó como filtro principal
+      if (filters.minPrice !== undefined && route.price < filters.minPrice) {
+        return false
+      }
+      if (filters.maxPrice !== undefined && route.price > filters.maxPrice) {
+        return false
+      }
+      
+      // Filtrar por tipo de vehículo
+      if (filters.vehicleType && route.vehicleType !== filters.vehicleType) {
+        return false
+      }
+      
+      return true
+    })
+  }
 
   /**
    * Validar datos de ruta

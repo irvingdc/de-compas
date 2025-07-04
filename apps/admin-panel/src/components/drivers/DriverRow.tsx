@@ -1,0 +1,169 @@
+import React from 'react'
+import {
+  TableRow,
+  TableCell,
+  Checkbox,
+  Box,
+  Typography,
+  Chip,
+  IconButton,
+  Tooltip,
+} from '@mui/material'
+import {
+  Visibility as VisibilityIcon,
+  Check as CheckIcon,
+  Close as CloseIcon,
+} from '@mui/icons-material'
+
+export interface Driver {
+  id: number
+  name: string
+  email: string
+  phone: string
+  status: 'pending' | 'approved' | 'rejected'
+  documentsComplete: boolean
+  registeredAt: string
+  licenseNumber?: string
+  vehicleType?: string
+  rating?: number
+}
+
+interface DriverRowProps {
+  driver: Driver
+  isSelected: boolean
+  onRowClick: (id: number) => void
+  onView: (driver: Driver) => void
+  onApprove: (driverId: number) => void
+  onReject: (driverId: number) => void
+}
+
+export const DriverRow: React.FC<DriverRowProps> = ({
+  driver,
+  isSelected,
+  onRowClick,
+  onView,
+  onApprove,
+  onReject,
+}) => {
+  const getStatusColor = (status: string): 'default' | 'success' | 'warning' | 'error' => {
+    switch (status) {
+      case 'approved': return 'success'
+      case 'pending': return 'warning'
+      case 'rejected': return 'error'
+      default: return 'default'
+    }
+  }
+
+  const getStatusText = (status: string): string => {
+    switch (status) {
+      case 'approved': return 'Aprobado'
+      case 'pending': return 'Pendiente'
+      case 'rejected': return 'Rechazado'
+      default: return status
+    }
+  }
+
+  return (
+    <TableRow
+      hover
+      onClick={() => onRowClick(driver.id)}
+      selected={isSelected}
+      sx={{ cursor: 'pointer' }}
+    >
+      <TableCell padding="checkbox">
+        <Checkbox
+          color="primary"
+          checked={isSelected}
+        />
+      </TableCell>
+      <TableCell>
+        <Box>
+          <Typography variant="body2" fontWeight="medium">
+            {driver.name}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Registrado: {driver.registeredAt}
+          </Typography>
+        </Box>
+      </TableCell>
+      <TableCell>
+        <Box>
+          <Typography variant="body2">{driver.email}</Typography>
+          <Typography variant="caption" color="text.secondary">
+            {driver.phone}
+          </Typography>
+        </Box>
+      </TableCell>
+      <TableCell>
+        <Chip
+          label={getStatusText(driver.status)}
+          color={getStatusColor(driver.status)}
+          size="small"
+          variant="outlined"
+        />
+      </TableCell>
+      <TableCell>
+        <Chip
+          label={driver.documentsComplete ? 'Completos' : 'Incompletos'}
+          color={driver.documentsComplete ? 'success' : 'error'}
+          size="small"
+          variant="outlined"
+        />
+      </TableCell>
+      <TableCell>
+        <Typography variant="body2">{driver.vehicleType || 'N/A'}</Typography>
+      </TableCell>
+      <TableCell>
+        <Box className="flex items-center">
+          <Typography variant="body2">
+            {driver.rating ? `${driver.rating}/5` : 'N/A'}
+          </Typography>
+          <span className="ml-1">⭐</span>
+        </Box>
+      </TableCell>
+      <TableCell>
+        <Box className="flex space-x-1">
+          <Tooltip title="Ver detalles">
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation()
+                onView(driver)
+              }}
+            >
+              <VisibilityIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          {driver.status === 'pending' && (
+            <>
+              <Tooltip title="Aprobar">
+                <IconButton
+                  size="small"
+                  color="success"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onApprove(driver.id)
+                  }}
+                >
+                  <CheckIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Rechazar">
+                <IconButton
+                  size="small"
+                  color="error"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onReject(driver.id)
+                  }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
+        </Box>
+      </TableCell>
+    </TableRow>
+  )
+} 

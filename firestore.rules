@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for role-based access control
+    function isAdmin() { 
+      return request.auth.token.role == 'admin'; 
+    }
+    
+    function isDriver() { 
+      return request.auth.token.role == 'conductor'; 
+    }
+    
+    function isTraveler() { 
+      return request.auth.token.role == 'viajero'; 
+    }
+    
+    function isSelf(uid) { 
+      return request.auth != null && request.auth.uid == uid; 
+    }
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // USERS collection
+    match /users/{uid} {
+      // Read: own profile or admin
+      allow read: if isSelf(uid) || isAdmin();
+      
+      // Update: own profile without modifying role or status
+      allow update: if isSelf(uid) &&
+        !("role" in request.resource.data.diff(resource.data)) &&
+        !("status" in request.resource.data.diff(resource.data));
+      
+      // Create/Delete: only admin (automated via Cloud Functions)
+      allow create, delete: if isAdmin();
+    }
+
+    // DRIVERS collection
+    match /drivers/{driverId} {
+      allow read: if isSelf(driverId) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // VEHICLES collection
+    match /vehicles/{vehicleId} {
+      allow read: true; // Public data (for passengers to see vehicle info)
+      allow write: if isAdmin();
+    }
+
+    // ROUTES collection
+    match /routes/{routeId} {
+      allow read: true; // Public for route search
+      allow write: if isAdmin();
+    }
+
+    // TRIPS collection
+    match /trips/{tripId} {
+      allow read: true; // Public for trip information
+      allow write: if isAdmin(); // Only admin or Cloud Functions
+    }
+
+    // TICKETS collection
+    match /tickets/{ticketId} {
+      allow read: if isSelf(resource.data.userId) || isAdmin();
+      allow write: if isAdmin(); // Tickets created via Cloud Functions
+    }
+
+    // ALERTS collection (panic button, incidents)
+    match /alerts/{alertId} {
+      allow create: if isAuthenticated(); // Any authenticated user can create alerts
+      allow read, update: if isAdmin(); // Only admin can read and manage alerts
+    }
+
+    // SETTINGS collection (system configuration)
+    match /settings/{settingId} {
+      allow read: if isAuthenticated(); // Basic settings readable by authenticated users
+      allow write: if isAdmin(); // Only admin can modify settings
+    }
+
+    // SUPPORT_REQUESTS collection
+    match /support_requests/{requestId} {
+      allow create: if isAuthenticated(); // Any user can create support requests
+      allow read: if isSelf(resource.data.userId) || isAdmin();
+      allow update: if isAdmin(); // Only admin can update (resolve) support requests
+    }
+
+    // AUDIT_LOG collection
+    match /audit_log/{logId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only Cloud Functions can write to audit log
+    }
+  }
+} 

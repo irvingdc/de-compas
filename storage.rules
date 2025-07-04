@@ -1,0 +1,49 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper functions
+    function isAdmin() {
+      return request.auth.token.role == 'admin';
+    }
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Documents uploaded by users for verification
+    match /documents/{userId}/{document} {
+      allow write: if request.auth.uid == userId; // Users can upload their own documents
+      allow read: if isAdmin(); // Only admin can read documents for verification
+    }
+
+    // Vehicle photos
+    match /vehicles/{vehicleId} {
+      allow read: true; // Public access to vehicle photos
+      allow write: if isAdmin(); // Only admin can upload vehicle photos
+    }
+
+    // QR codes for tickets
+    match /qr/{ticketId} {
+      allow read: if isAuthenticated(); // Authenticated users can read QR codes
+      allow write: if isAdmin(); // Only admin/Cloud Functions can create QR codes
+    }
+
+    // Profile pictures
+    match /profiles/{userId} {
+      allow read: true; // Public access to profile pictures
+      allow write: if request.auth.uid == userId; // Users can upload their own profile pictures
+    }
+
+    // System assets (banners, logos, etc.)
+    match /system/{asset} {
+      allow read: true; // Public access to system assets
+      allow write: if isAdmin(); // Only admin can upload system assets
+    }
+
+    // Default rule: deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+} 

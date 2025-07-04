@@ -1,0 +1,31 @@
+{
+  "name": "decompas-monorepo",
+  "version": "1.0.0",
+  "description": "De Compas - Plataforma de viajes compartidos interestatales",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev --workspace=apps/admin-panel",
+    "dev:viajero": "npm run dev --workspace=apps/viajero-app",
+    "dev:conductor": "npm run dev --workspace=apps/conductor-app",
+    "build:admin": "npm run build --workspace=apps/admin-panel",
+    "build:viajero": "npm run build --workspace=apps/viajero-app",
+    "build:conductor": "npm run build --workspace=apps/conductor-app",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces",
+    "firebase:emulators": "firebase emulators:start",
+    "firebase:deploy": "firebase deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "firebase-tools": "^13.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+} 

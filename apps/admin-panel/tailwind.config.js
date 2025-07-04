@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // Habilita dark mode usando la clase 'dark'
   theme: {
     extend: {
       colors: {
@@ -57,13 +58,31 @@ export default {
           800: '#166534',
           900: '#14532d',
         },
-        // Colores oficiales específicos
+        // Colores oficiales específicos con soporte para dark mode
         brand: {
           yellow: '#FFCF06',
           black: '#000000',
+          white: '#FFFFFF',
           'gray-dark': '#2C2C2C',
           'gray-light': '#E0E0E0',
-          white: '#FFFFFF',
+        },
+        // Colores para dark mode
+        dark: {
+          bg: {
+            primary: '#0f0f0f',    // Fondo principal oscuro
+            secondary: '#1a1a1a',  // Fondo secundario
+            card: '#262626',       // Fondo de tarjetas
+            hover: '#333333',      // Estados hover
+          },
+          text: {
+            primary: '#ffffff',    // Texto principal en dark
+            secondary: '#d4d4d8',  // Texto secundario
+            muted: '#a1a1aa',      // Texto deshabilitado
+          },
+          border: {
+            primary: '#404040',    // Bordes principales
+            secondary: '#2a2a2a',  // Bordes secundarios
+          }
         },
       },
       fontFamily: {

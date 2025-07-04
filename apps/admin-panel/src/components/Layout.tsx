@@ -1,6 +1,8 @@
 import React from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import { ThemeToggle } from './ThemeToggle'
 import { 
   Home, 
   Map, 
@@ -11,10 +13,14 @@ import {
   Settings, 
   LogOut 
 } from 'lucide-react'
+import { Tooltip } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material'
 
 export const Layout: React.FC = () => {
   const { user, logout } = useAuth()
+  const { isDark } = useTheme()
   const location = useLocation()
+  const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false)
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
@@ -27,6 +33,7 @@ export const Layout: React.FC = () => {
   ]
 
   const handleLogout = async () => {
+    setLogoutDialogOpen(false)
     try {
       await logout()
     } catch (error) {
@@ -35,14 +42,20 @@ export const Layout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className={`min-h-screen ${isDark ? 'dark:bg-dark-bg-primary' : 'bg-neutral-50'}`}>
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg border-r border-neutral-200">
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 shadow-lg border-r ${
+        isDark 
+          ? 'bg-dark-bg-card border-dark-border-secondary' 
+          : 'bg-white border-neutral-200'
+      }`}>
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 items-center justify-center border-b border-neutral-200 px-4">
+          <div className={`flex h-16 items-center justify-center border-b px-4 ${
+            isDark ? 'border-dark-border-secondary' : 'border-neutral-200'
+          }`}>
             <img 
-              src="/assets/LOGO_HORIZONTAL_BLACK.png" 
+              src={isDark ? "/assets/LOGO_HORIZONTAL_WHITE.png" : "/assets/LOGO_HORIZONTAL_BLACK.png"}
               alt="De Compas" 
               className="h-8 w-auto"
             />
@@ -59,11 +72,15 @@ export const Layout: React.FC = () => {
                   to={item.href}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
                     isActive
-                      ? 'bg-primary-100 text-primary-700 border-l-4 border-primary-500'
-                      : 'text-secondary-700 hover:bg-neutral-100 hover:text-secondary-900'
+                      ? `${isDark ? 'bg-primary-900 text-primary-400' : 'bg-primary-100 text-primary-700'} border-l-4 border-primary-500`
+                      : `${isDark ? 'text-dark-text-secondary hover:bg-dark-bg-hover hover:text-dark-text-primary' : 'text-secondary-700 hover:bg-neutral-100 hover:text-secondary-900'}`
                   }`}
                 >
-                  <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary-600' : 'text-secondary-600'}`} />
+                  <Icon className={`mr-3 h-5 w-5 ${
+                    isActive 
+                      ? `${isDark ? 'text-primary-400' : 'text-primary-600'}` 
+                      : `${isDark ? 'text-dark-text-muted' : 'text-secondary-600'}`
+                  }`} />
                   {item.name}
                 </Link>
               )
@@ -71,7 +88,7 @@ export const Layout: React.FC = () => {
           </nav>
 
           {/* User section */}
-          <div className="border-t border-neutral-200 p-4">
+          <div className={`border-t p-4 ${isDark ? 'border-dark-border-secondary' : 'border-neutral-200'}`}>
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <div className="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center">
@@ -80,22 +97,48 @@ export const Layout: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-brand-black">
-                  {user?.email}
-                </p>
-                <p className="text-xs text-secondary-600">Administrador</p>
+              <div className="ml-3 flex-1 min-w-0">
+                <p className={`text-sm font-medium truncate ${isDark ? 'text-dark-text-primary' : 'text-brand-black'}`}>{user?.email}</p>
+                <p className={`text-xs ${isDark ? 'text-dark-text-secondary' : 'text-secondary-600'}`}>Administrador</p>
               </div>
-              <button
-                onClick={handleLogout}
-                className="ml-3 p-1 rounded-full text-secondary-400 hover:text-secondary-500 hover:bg-neutral-100 transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
+            </div>
+            <div className="flex justify-center gap-2 mt-4">
+              <ThemeToggle />
+              <Tooltip title="Cerrar sesión">
+                <button
+                  onClick={() => setLogoutDialogOpen(true)}
+                  className={`p-2 rounded-full transition-colors ${
+                    isDark 
+                      ? 'text-dark-text-muted hover:text-dark-text-primary hover:bg-dark-bg-hover' 
+                      : 'text-secondary-400 hover:text-secondary-500 hover:bg-neutral-100'
+                  }`}
+                  aria-label="Cerrar sesión"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </Tooltip>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Dialogo de confirmación para cerrar sesión */}
+      <Dialog open={logoutDialogOpen} onClose={() => setLogoutDialogOpen(false)}>
+        <DialogTitle>¿Cerrar sesión?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas cerrar tu sesión?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLogoutDialogOpen(false)} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleLogout} color="primary" autoFocus>
+            Cerrar sesión
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Main content */}
       <div className="ml-64">

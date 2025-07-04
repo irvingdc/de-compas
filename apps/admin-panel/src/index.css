@@ -4,10 +4,13 @@
 
 @layer base {
   * {
-    @apply border-neutral-200;
+    @apply border-neutral-200 dark:border-dark-border-secondary;
   }
   body {
-    @apply bg-neutral-50 text-brand-black;
+    @apply bg-neutral-50 text-brand-black dark:bg-dark-bg-primary dark:text-dark-text-primary;
+  }
+  html {
+    @apply transition-colors duration-300;
   }
 }
 
@@ -21,18 +24,55 @@
   }
   
   .btn-secondary {
-    @apply btn bg-secondary-800 text-white hover:bg-secondary-900 px-4 py-2;
+    @apply btn bg-secondary-800 text-white hover:bg-secondary-900 dark:bg-secondary-600 dark:hover:bg-secondary-700 px-4 py-2;
   }
   
   .btn-outline {
-    @apply btn border border-neutral-300 bg-white hover:bg-neutral-50 px-4 py-2 text-secondary-800;
+    @apply btn border border-neutral-300 bg-white hover:bg-neutral-50 text-secondary-800 dark:border-dark-border-primary dark:bg-dark-bg-card dark:hover:bg-dark-bg-hover dark:text-dark-text-primary px-4 py-2;
   }
   
   .card {
-    @apply rounded-lg border border-neutral-200 bg-white shadow-sm p-6;
+    @apply rounded-lg border border-neutral-200 bg-white shadow-sm p-6 dark:border-dark-border-secondary dark:bg-dark-bg-card;
   }
   
   .input {
-    @apply flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm placeholder:text-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm placeholder:text-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-border-primary dark:bg-dark-bg-card dark:text-dark-text-primary dark:placeholder:text-dark-text-muted;
   }
+
+  /* Navegación activa con gradiente sutil */
+  .nav-active {
+    @apply bg-gradient-to-r from-primary-100 to-primary-50 text-primary-700 border-l-4 border-primary-500 dark:from-primary-900 dark:to-primary-800 dark:text-primary-400;
+  }
+
+  /* Estados hover suaves */
+  .hover-lift {
+    @apply transition-all duration-200 hover:scale-105 hover:shadow-md;
+  }
+
+  /* Scrollbar personalizado para dark mode */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.neutral.400') transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-neutral-400 rounded-full hover:bg-neutral-500 dark:bg-dark-border-primary dark:hover:bg-dark-text-muted;
+  }
+} 
+
+/* Transiciones suaves para cambio de tema */
+* {
+  transition: 
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    box-shadow 300ms ease;
 } 

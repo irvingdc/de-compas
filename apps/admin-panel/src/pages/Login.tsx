@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 import { Navigate } from 'react-router-dom'
 
 export const Login: React.FC = () => {
   const { user, login } = useAuth()
+  const { isDark } = useTheme()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -28,27 +30,27 @@ export const Login: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           {/* Logo */}
           <div className="flex justify-center mb-6">
             <img 
-              src="/assets/LOGO_VERTICAL_BLACK.png" 
+              src={isDark ? "/assets/LOGO_VERTICAL_WHITE.png" : "/assets/LOGO_VERTICAL_BLACK.png"}
               alt="De Compas" 
               className="h-24 w-auto"
             />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-brand-black">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-brand-black dark:text-dark-text-primary">
             Panel Administrativo
           </h2>
-          <p className="mt-2 text-center text-sm text-secondary-600">
+          <p className="mt-2 text-center text-sm text-secondary-600 dark:text-dark-text-secondary">
             Iniciar Sesión
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-md">
               {error}
             </div>
           )}
@@ -63,7 +65,7 @@ export const Login: React.FC = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-neutral-300 placeholder-secondary-500 text-brand-black rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-neutral-300 dark:border-dark-border-primary placeholder-secondary-500 dark:placeholder-dark-text-muted text-brand-black dark:text-dark-text-primary bg-white dark:bg-dark-bg-card rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -79,7 +81,7 @@ export const Login: React.FC = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-neutral-300 placeholder-secondary-500 text-brand-black rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-neutral-300 dark:border-dark-border-primary placeholder-secondary-500 dark:placeholder-dark-text-muted text-brand-black dark:text-dark-text-primary bg-white dark:bg-dark-bg-card rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

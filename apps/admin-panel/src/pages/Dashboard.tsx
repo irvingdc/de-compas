@@ -68,23 +68,23 @@ export const Dashboard: React.FC = () => {
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
-            <div key={stat.name} className="bg-white overflow-hidden shadow rounded-lg">
+            <div key={stat.name} className="bg-white dark:bg-dark-bg-card overflow-hidden shadow rounded-lg border border-neutral-200 dark:border-dark-border-secondary">
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <Icon className="h-6 w-6 text-secondary-400" />
+                    <Icon className="h-6 w-6 text-secondary-400 dark:text-dark-text-muted" />
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-secondary-500 truncate">
+                      <dt className="text-sm font-medium text-secondary-500 dark:text-dark-text-secondary truncate">
                         {stat.name}
                       </dt>
                       <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-brand-black">
+                        <div className="text-2xl font-semibold text-brand-black dark:text-dark-text-primary">
                           {stat.value}
                         </div>
-                        <div className="ml-2 flex items-baseline text-sm font-semibold text-success-600">
-                          <TrendingUp className="h-4 w-4 text-success-500" />
+                        <div className="ml-2 flex items-baseline text-sm font-semibold text-success-600 dark:text-success-400">
+                          <TrendingUp className="h-4 w-4 text-success-500 dark:text-success-400" />
                           {stat.change}
                         </div>
                       </dd>

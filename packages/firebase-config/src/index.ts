@@ -79,7 +79,6 @@ export interface Route {
   id: string
   origin: string
   destination: string
-  stops: string[]
   price: number
   estimatedDuration: string
   frequency: string[]

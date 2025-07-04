@@ -1,30 +1,31 @@
 import { Timestamp } from 'firebase/firestore'
 
-export interface RouteStop {
-  id: string
-  name: string
-  city: string
-  state: string
-  coordinates?: {
-    latitude: number
-    longitude: number
-  }
-  estimatedTime: string // Format: "1h 30m" desde el origen
-  order: number // Orden en la ruta
-}
-
 export interface Route {
   id: string
   name: string // Nombre descriptivo de la ruta
-  origin: RouteStop
-  destination: RouteStop
-  stops: RouteStop[] // Paradas intermedias
+  origin: {
+    name: string
+    city: string
+    state: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
+  }
+  destination: {
+    name: string
+    city: string
+    state: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
+  }
   price: number // Precio base en pesos mexicanos
   duration: string // Duración estimada total
   distance: number // Distancia en kilómetros
   active: boolean
   description?: string
-  amenities?: string[] // Servicios incluidos (WiFi, A/C, etc.)
   vehicleType?: string // Tipo de vehículo recomendado
   createdAt: Timestamp
   updatedAt: Timestamp
@@ -33,29 +34,57 @@ export interface Route {
 
 export interface CreateRouteData {
   name: string
-  origin: Omit<RouteStop, 'id'>
-  destination: Omit<RouteStop, 'id'>
-  stops: Omit<RouteStop, 'id'>[]
+  origin: {
+    name: string
+    city: string
+    state: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
+  }
+  destination: {
+    name: string
+    city: string
+    state: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
+  }
   price: number
   duration: string
   distance: number
   active: boolean
   description?: string
-  amenities?: string[]
   vehicleType?: string
 }
 
 export interface UpdateRouteData {
   name?: string
-  origin?: Omit<RouteStop, 'id'>
-  destination?: Omit<RouteStop, 'id'>
-  stops?: Omit<RouteStop, 'id'>[]
+  origin?: {
+    name: string
+    city: string
+    state: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
+  }
+  destination?: {
+    name: string
+    city: string
+    state: string
+    coordinates?: {
+      latitude: number
+      longitude: number
+    }
+  }
   price?: number
   duration?: string
   distance?: number
   active?: boolean
   description?: string
-  amenities?: string[]
   vehicleType?: string
 }
 

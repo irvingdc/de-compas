@@ -44,7 +44,6 @@ Tener una app web funcional para que los administradores puedan:
 {
   origin: 'CDMX',
   destination: 'Guadalajara',
-  stops: ['Querétaro'],
   price: 420,
   estimatedDuration: '5h 30m',
   frequency: ['lunes', 'miércoles', 'viernes'],

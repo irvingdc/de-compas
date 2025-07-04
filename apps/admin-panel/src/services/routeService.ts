@@ -23,8 +23,7 @@ import {
   CreateRouteData, 
   UpdateRouteData, 
   RouteFilters, 
-  RouteSearchResult,
-  RouteStop
+  RouteSearchResult
 } from '../types/route'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -48,31 +47,9 @@ class RouteService {
       // Validar datos
       this.validateRouteData(data)
 
-      // Generar IDs para las paradas
-      const origin: RouteStop = {
-        id: uuidv4(),
-        ...data.origin,
-        order: 0
-      }
-
-      const destination: RouteStop = {
-        id: uuidv4(),
-        ...data.destination,
-        order: data.stops.length + 1
-      }
-
-      const stops: RouteStop[] = data.stops.map((stop, index) => ({
-        id: uuidv4(),
-        ...stop,
-        order: index + 1
-      }))
-
       const now = Timestamp.now()
       const routeData = {
         ...data,
-        origin,
-        destination,
-        stops,
         createdAt: now,
         updatedAt: now,
         createdBy: currentUser.uid
@@ -229,31 +206,6 @@ class RouteService {
         updatedAt: Timestamp.now()
       }
 
-      // Si se actualizan las paradas, generar IDs
-      if (data.origin) {
-        updateData.origin = {
-          id: uuidv4(),
-          ...data.origin,
-          order: 0
-        }
-      }
-
-      if (data.destination) {
-        updateData.destination = {
-          id: uuidv4(),
-          ...data.destination,
-          order: (data.stops?.length || 0) + 1
-        }
-      }
-
-      if (data.stops) {
-        updateData.stops = data.stops.map((stop, index) => ({
-          id: uuidv4(),
-          ...stop,
-          order: index + 1
-        }))
-      }
-
       await updateDoc(docRef, updateData)
 
       // Obtener la ruta actualizada
@@ -352,8 +304,7 @@ class RouteService {
       const filteredRoutes = allRoutes.filter(route => 
         route.name.toLowerCase().includes(searchTermLower) ||
         route.origin.city.toLowerCase().includes(searchTermLower) ||
-        route.destination.city.toLowerCase().includes(searchTermLower) ||
-        route.stops.some(stop => stop.city.toLowerCase().includes(searchTermLower))
+        route.destination.city.toLowerCase().includes(searchTermLower)
       )
 
       return {

@@ -103,7 +103,7 @@
     - Escaneo de boletos QR para validar pasajeros.
     - Botones “Iniciar” y “Finalizar” viaje.
     - Envío de ubicación al backend cada pocos segundos.
-    - Registro automático de paradas.
+    - Registro automático de ubicación.
 5. **Seguridad en Ruta**
     - Botón de pánico conectado al centro de soporte.
     - Canal de comunicación con administración.

@@ -73,19 +73,6 @@ export const RouteRow: React.FC<RouteRowProps> = ({
         </Box>
       </TableCell>
       <TableCell>
-        <Box>
-          {route.stops.length > 0 ? (
-            <Typography variant="body2">
-              {route.stops.map(stop => stop.city).join(', ')}
-            </Typography>
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              Directo
-            </Typography>
-          )}
-        </Box>
-      </TableCell>
-      <TableCell>
         <Typography variant="body2" fontWeight="medium">
           ${route.price}
         </Typography>

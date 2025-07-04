@@ -66,7 +66,6 @@ export const RouteTable: React.FC<RouteTableProps> = ({
                 />
               </TableCell>
               <TableCell>Ruta</TableCell>
-              <TableCell>Paradas</TableCell>
               <TableCell>Precio</TableCell>
               <TableCell>Duración</TableCell>
               <TableCell>Estado</TableCell>

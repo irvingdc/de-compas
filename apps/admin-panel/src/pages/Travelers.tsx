@@ -12,6 +12,7 @@ import {
   useTravelers,
 } from '../components/travelers'
 import { ConfirmationDialog } from '../components/common'
+import { Traveler } from '../types/traveler'
 
 export const Travelers: React.FC = () => {
   const {
@@ -58,16 +59,27 @@ export const Travelers: React.FC = () => {
     setViewDialogOpen(true)
   }
 
-  const handleEdit = (traveler: typeof selectedTraveler) => {
+  const handleEditTraveler = (traveler: Traveler) => {
     // TODO: Implementar edición
-    console.log('Edit traveler:', traveler)
+    console.log('Edit traveler:', traveler.id)
   }
 
-  const handleDelete = (travelerId: number) => {
-    const traveler = travelers.find((t: any) => t.id === travelerId)
+  const handleEditTravelerById = (id: string) => {
+    const traveler = travelers.find((t: Traveler) => t.id === id)
     if (traveler) {
-      setTravelerToAction(traveler)
-      setDeleteDialogOpen(true)
+      handleEditTraveler(traveler)
+    }
+  }
+
+  const handleDeleteTravelerLocal = (traveler: Traveler) => {
+    setTravelerToAction(traveler)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteTravelerById = (id: string) => {
+    const traveler = travelers.find((t: Traveler) => t.id === id)
+    if (traveler) {
+      handleDeleteTravelerLocal(traveler)
     }
   }
 
@@ -75,8 +87,8 @@ export const Travelers: React.FC = () => {
     setDeleteDialogOpen(true)
   }
 
-  const handleToggleStatusAction = (travelerId: number) => {
-    const traveler = travelers.find((t: any) => t.id === travelerId)
+  const handleToggleStatusAction = (travelerId: string) => {
+    const traveler = travelers.find((t: Traveler) => t.id === travelerId)
     if (traveler) {
       setTravelerToAction(traveler)
       setToggleStatusDialogOpen(true)
@@ -144,8 +156,8 @@ export const Travelers: React.FC = () => {
         onSelectAll={handleSelectAllClick}
         onRowClick={handleRowClick}
         onView={handleView}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+        onEdit={handleEditTraveler}
+        onDelete={handleDeleteTravelerById}
         onToggleStatus={handleToggleStatusAction}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -156,9 +168,9 @@ export const Travelers: React.FC = () => {
         open={viewDialogOpen}
         traveler={selectedTraveler}
         onClose={() => setViewDialogOpen(false)}
-        onEdit={handleEdit}
+        onEdit={handleEditTravelerById}
         onToggleStatus={handleToggleStatusAction}
-        onDelete={handleDelete}
+        onDelete={handleDeleteTravelerById}
       />
 
       {/* Diálogos de Confirmación */}

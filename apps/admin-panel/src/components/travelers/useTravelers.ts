@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Traveler } from './TravelerRow'
+import { Traveler } from '../../types/traveler'
 import { TravelerFilters } from './TravelerFilters'
 
 export interface UseTravelersState {
@@ -7,7 +7,7 @@ export interface UseTravelersState {
   travelers: Traveler[]
   loading: boolean
   error: string | null
-  selected: number[]
+  selected: string[]
   
   // Paginación
   page: number
@@ -35,13 +35,13 @@ export interface UseTravelersActions {
   // Operaciones de datos
   loadTravelers: () => Promise<void>
   handleSearch: () => Promise<void>
-  handleToggleStatus: (travelerId: number) => Promise<void>
-  handleDeleteTraveler: (travelerId: number) => Promise<void>
+  handleToggleStatus: (travelerId: string) => Promise<void>
+  handleDeleteTraveler: (travelerId: string) => Promise<void>
   handleDeleteMultiple: () => Promise<void>
   
   // Selección
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
-  handleRowClick: (id: number) => void
+  handleRowClick: (id: string) => void
   
   // Paginación
   handleChangePage: (event: unknown, newPage: number) => void
@@ -67,7 +67,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
   const [travelers, setTravelers] = useState<Traveler[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selected, setSelected] = useState<number[]>([])
+  const [selected, setSelected] = useState<string[]>([])
   
   // Paginación
   const [page, setPage] = useState(0)
@@ -93,20 +93,21 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
   // Datos mock para demo
   const mockTravelers: Traveler[] = [
     {
-      id: 1,
-      name: 'Ana Martínez',
-      email: 'ana@example.com',
-      phone: '+52 55 1111 2222',
+      id: '1',
+      name: 'Ana López',
+      email: 'ana.lopez@email.com',
+      phone: '555-5678',
       status: 'active',
-      registeredAt: '2024-01-10',
-      lastTrip: '2024-01-20',
-      totalTrips: 15,
+      registeredAt: '2023-02-01',
+      lastTrip: '2023-06-01',
+      totalTrips: 12,
       rating: 4.8,
-      location: 'Ciudad de México',
-      preferences: ['Música', 'Aire acondicionado', 'Conductor amigable'],
+      avatar: '',
+      location: 'CDMX',
+      preferences: ['ventana', 'maleta grande'],
     },
     {
-      id: 2,
+      id: '2',
       name: 'Luis González',
       email: 'luis@example.com',
       phone: '+52 33 3333 4444',
@@ -119,7 +120,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
       preferences: ['WiFi', 'Asientos cómodos', 'Conductor puntual'],
     },
     {
-      id: 3,
+      id: '3',
       name: 'Carmen Rodríguez',
       email: 'carmen@example.com',
       phone: '+52 81 5555 6666',
@@ -132,7 +133,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
       preferences: ['Precio económico'],
     },
     {
-      id: 4,
+      id: '4',
       name: 'Roberto Silva',
       email: 'roberto@example.com',
       phone: '+52 55 7777 8888',
@@ -145,7 +146,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
       preferences: [],
     },
     {
-      id: 5,
+      id: '5',
       name: 'Patricia López',
       email: 'patricia@example.com',
       phone: '+52 33 9999 0000',
@@ -158,7 +159,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
       preferences: ['Música clásica', 'Conductor profesional'],
     },
     {
-      id: 6,
+      id: '6',
       name: 'Miguel Torres',
       email: 'miguel@example.com',
       phone: '+52 81 1111 3333',
@@ -250,9 +251,9 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
     setSelected([])
   }
 
-  const handleRowClick = (id: number) => {
+  const handleRowClick = (id: string) => {
     const selectedIndex = selected.indexOf(id)
-    let newSelected: number[] = []
+    let newSelected: string[] = []
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id)
@@ -279,7 +280,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
     setPage(0)
   }
 
-  const handleToggleStatus = async (travelerId: number) => {
+  const handleToggleStatus = async (travelerId: string) => {
     try {
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 500))
@@ -300,7 +301,7 @@ export const useTravelers = (): UseTravelersState & UseTravelersActions => {
     }
   }
 
-  const handleDeleteTraveler = async (travelerId: number) => {
+  const handleDeleteTraveler = async (travelerId: string) => {
     try {
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 500))

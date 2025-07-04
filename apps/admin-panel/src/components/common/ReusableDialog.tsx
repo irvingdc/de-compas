@@ -1,15 +1,13 @@
 import React from 'react'
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   IconButton,
-  Typography,
   Box,
-  Divider,
+  Typography,
   Button,
-  ButtonProps
+  ButtonProps,
 } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
 
@@ -18,11 +16,9 @@ export interface ReusableDialogProps {
   onClose: () => void
   title: string
   children: React.ReactNode
-  actions?: React.ReactNode
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  fullWidth?: boolean
-  disableBackdropClick?: boolean
-  disableEscapeKeyDown?: boolean
+  actions?: React.ReactNode
+  showCloseButton?: boolean
 }
 
 /**
@@ -54,19 +50,17 @@ export const ReusableDialog: React.FC<ReusableDialogProps> = ({
   onClose,
   title,
   children,
+  maxWidth = 'sm',
   actions,
-  maxWidth = 'md',
-  fullWidth = true,
-  disableBackdropClick = false,
-  disableEscapeKeyDown = false,
+  showCloseButton = true,
 }) => {
   return (
     <Dialog
       open={open}
       onClose={onClose}
       maxWidth={maxWidth}
-      fullWidth={fullWidth}
-      disableEscapeKeyDown={disableEscapeKeyDown}
+      fullWidth={true}
+      disableEscapeKeyDown={false}
       PaperProps={{
         sx: {
           borderRadius: 2,
@@ -84,17 +78,17 @@ export const ReusableDialog: React.FC<ReusableDialogProps> = ({
           >
             {title}
           </Typography>
-          <IconButton
-            onClick={onClose}
-            size="small"
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-          >
-            <CloseIcon />
-          </IconButton>
+          {showCloseButton && (
+            <IconButton
+              onClick={onClose}
+              size="small"
+              className="text-neutral-500 hover:text-neutral-700 dark:text-dark-text-secondary dark:hover:text-dark-text-primary"
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
         </Box>
       </Box>
-
-      <Divider className="border-neutral-200 dark:border-dark-border-secondary" />
 
       {/* Content */}
       <DialogContent className="px-6 py-4">
@@ -104,7 +98,6 @@ export const ReusableDialog: React.FC<ReusableDialogProps> = ({
       {/* Footer */}
       {actions && (
         <>
-          <Divider className="border-neutral-200 dark:border-dark-border-secondary" />
           <Box className="px-6 py-2 bg-neutral-100 dark:bg-dark-bg-hover">
             <DialogActions className="justify-end p-0">
               {actions}

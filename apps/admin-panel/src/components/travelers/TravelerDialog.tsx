@@ -1,15 +1,15 @@
 import React from 'react'
 import { Typography, Box, Chip, Avatar, Divider } from '@mui/material'
 import { ReusableDialog, ActionButton } from '../common'
-import { Traveler } from './TravelerRow'
+import { Traveler } from '../../types/traveler'
 
 interface TravelerDialogProps {
   open: boolean
   traveler: Traveler | null
   onClose: () => void
-  onEdit: (traveler: Traveler) => void
-  onToggleStatus: (travelerId: number) => void
-  onDelete: (travelerId: number) => void
+  onEdit: (id: string) => void
+  onToggleStatus: (id: string) => void
+  onDelete: (id: string) => void
 }
 
 export const TravelerDialog: React.FC<TravelerDialogProps> = ({
@@ -40,6 +40,9 @@ export const TravelerDialog: React.FC<TravelerDialogProps> = ({
     }
   }
 
+  const handleEdit = () => traveler && onEdit(traveler.id)
+  const handleDelete = () => traveler && onDelete(traveler.id)
+  const handleToggleStatus = () => traveler && onToggleStatus(traveler.id)
 
 
   return (
@@ -55,19 +58,19 @@ export const TravelerDialog: React.FC<TravelerDialogProps> = ({
           </ActionButton>
           <ActionButton 
             variant="danger" 
-            onClick={() => onDelete(traveler.id)}
+            onClick={handleDelete}
           >
             Eliminar
           </ActionButton>
           <ActionButton 
             variant="primary" 
-            onClick={() => onEdit(traveler)}
+            onClick={handleEdit}
           >
             Editar
           </ActionButton>
           <ActionButton 
             variant={traveler.status === 'active' ? 'danger' : 'primary'} 
-            onClick={() => onToggleStatus(traveler.id)}
+            onClick={handleToggleStatus}
           >
             {traveler.status === 'active' ? 'Suspender' : 'Activar'}
           </ActionButton>

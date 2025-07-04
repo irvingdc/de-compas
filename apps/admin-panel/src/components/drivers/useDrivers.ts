@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Driver } from './DriverRow'
+import { Driver } from '../../types/driver'
 import { DriverFilters } from './DriverFilters'
 
 export interface UseDriversState {
@@ -7,7 +7,7 @@ export interface UseDriversState {
   drivers: Driver[]
   loading: boolean
   error: string | null
-  selected: number[]
+  selected: string[]
   
   // Paginación
   page: number
@@ -35,14 +35,14 @@ export interface UseDriversActions {
   // Operaciones de datos
   loadDrivers: () => Promise<void>
   handleSearch: () => Promise<void>
-  handleApproveDriver: (driverId: number) => Promise<void>
-  handleRejectDriver: (driverId: number) => Promise<void>
-  handleDeleteDriver: (driverId: number) => Promise<void>
+  handleApproveDriver: (driverId: string) => Promise<void>
+  handleRejectDriver: (driverId: string) => Promise<void>
+  handleDeleteDriver: (driverId: string) => Promise<void>
   handleDeleteMultiple: () => Promise<void>
   
   // Selección
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
-  handleRowClick: (id: number) => void
+  handleRowClick: (id: string) => void
   
   // Paginación
   handleChangePage: (event: unknown, newPage: number) => void
@@ -68,7 +68,7 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
   const [drivers, setDrivers] = useState<Driver[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selected, setSelected] = useState<number[]>([])
+  const [selected, setSelected] = useState<string[]>([])
   
   // Paginación
   const [page, setPage] = useState(0)
@@ -94,19 +94,19 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
   // Datos mock para demo
   const mockDrivers: Driver[] = [
     {
-      id: 1,
+      id: '1',
       name: 'Juan Pérez',
-      email: 'juan@example.com',
-      phone: '+52 55 1234 5678',
-      status: 'pending',
+      email: 'juan.perez@email.com',
+      phone: '555-1234',
+      status: 'approved',
       documentsComplete: true,
-      registeredAt: '2024-01-15',
-      licenseNumber: 'ABC123456',
-      vehicleType: 'Sedan',
+      registeredAt: '2023-01-01',
+      licenseNumber: 'ABC123',
+      vehicleType: 'Sedán',
       rating: 4.5,
     },
     {
-      id: 2,
+      id: '2',
       name: 'María García',
       email: 'maria@example.com',
       phone: '+52 33 9876 5432',
@@ -118,7 +118,7 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
       rating: 4.8,
     },
     {
-      id: 3,
+      id: '3',
       name: 'Carlos Rodríguez',
       email: 'carlos@example.com',
       phone: '+52 81 5555 0123',
@@ -205,9 +205,9 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
     setSelected([])
   }
 
-  const handleRowClick = (id: number) => {
+  const handleRowClick = (id: string) => {
     const selectedIndex = selected.indexOf(id)
-    let newSelected: number[] = []
+    let newSelected: string[] = []
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id)
@@ -234,7 +234,7 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
     setPage(0)
   }
 
-  const handleApproveDriver = async (driverId: number) => {
+  const handleApproveDriver = async (driverId: string) => {
     try {
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 500))
@@ -251,7 +251,7 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
     }
   }
 
-  const handleRejectDriver = async (driverId: number) => {
+  const handleRejectDriver = async (driverId: string) => {
     try {
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 500))
@@ -268,7 +268,7 @@ export const useDrivers = (): UseDriversState & UseDriversActions => {
     }
   }
 
-  const handleDeleteDriver = async (driverId: number) => {
+  const handleDeleteDriver = async (driverId: string) => {
     try {
       // Simular llamada a API
       await new Promise(resolve => setTimeout(resolve, 500))

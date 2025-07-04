@@ -12,10 +12,11 @@ import {
   useDrivers,
 } from '../components/drivers'
 import { ConfirmationDialog } from '../components/common'
+import { Driver } from '../types/driver'
 
 export const Drivers: React.FC = () => {
   const {
-    // Estados
+    // Datos
     drivers,
     loading,
     error,
@@ -26,7 +27,6 @@ export const Drivers: React.FC = () => {
     filters,
     searchTerm,
     showFilters,
-    viewDialogOpen,
     selectedDriver,
     snackbar,
     
@@ -60,27 +60,43 @@ export const Drivers: React.FC = () => {
     setViewDialogOpen(true)
   }
 
-  const handleApprove = (driverId: number) => {
-    const driver = drivers.find((d: any) => d.id === driverId)
+  const handleApprove = (driverId: string) => {
+    const driver = drivers.find((d: Driver) => d.id === driverId)
     if (driver) {
       setDriverToAction(driver)
       setApproveDialogOpen(true)
     }
   }
 
-  const handleReject = (driverId: number) => {
-    const driver = drivers.find((d: any) => d.id === driverId)
+  const handleReject = (driverId: string) => {
+    const driver = drivers.find((d: Driver) => d.id === driverId)
     if (driver) {
       setDriverToAction(driver)
       setRejectDialogOpen(true)
     }
   }
 
-  const handleDelete = (driverId: number) => {
-    const driver = drivers.find((d: any) => d.id === driverId)
+  const handleEditDriver = (driver: Driver) => {
+    // TODO: Implementar edición
+    console.log('Edit driver:', driver.id)
+  }
+
+  const handleDeleteDriverLocal = (driver: Driver) => {
+    setDriverToAction(driver)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleEditDriverById = (id: string) => {
+    const driver = drivers.find((d: Driver) => d.id === id)
     if (driver) {
-      setDriverToAction(driver)
-      setDeleteDialogOpen(true)
+      handleEditDriver(driver)
+    }
+  }
+
+  const handleDeleteDriverById = (id: string) => {
+    const driver = drivers.find((d: Driver) => d.id === id)
+    if (driver) {
+      handleDeleteDriverLocal(driver)
     }
   }
 
@@ -161,15 +177,16 @@ export const Drivers: React.FC = () => {
         onReject={handleReject}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
+        onEdit={handleEditDriver}
+        onDelete={handleDeleteDriverLocal}
       />
 
       {/* Diálogo de Detalles de Conductor */}
       <DriverDialog
-        open={viewDialogOpen}
         driver={selectedDriver}
         onClose={() => setViewDialogOpen(false)}
-        onApprove={handleApprove}
-        onReject={handleReject}
+        onEdit={handleEditDriverById}
+        onDelete={handleDeleteDriverById}
       />
 
       {/* Diálogos de Confirmación */}

@@ -14,27 +14,17 @@ import {
   Check as CheckIcon,
   Close as CloseIcon,
 } from '@mui/icons-material'
-
-export interface Driver {
-  id: number
-  name: string
-  email: string
-  phone: string
-  status: 'pending' | 'approved' | 'rejected'
-  documentsComplete: boolean
-  registeredAt: string
-  licenseNumber?: string
-  vehicleType?: string
-  rating?: number
-}
+import { Driver } from '../../types/driver'
 
 interface DriverRowProps {
   driver: Driver
   isSelected: boolean
-  onRowClick: (id: number) => void
+  onRowClick: (id: string) => void
   onView: (driver: Driver) => void
-  onApprove: (driverId: number) => void
-  onReject: (driverId: number) => void
+  onApprove: (driverId: string) => void
+  onReject: (driverId: string) => void
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
 }
 
 export const DriverRow: React.FC<DriverRowProps> = ({

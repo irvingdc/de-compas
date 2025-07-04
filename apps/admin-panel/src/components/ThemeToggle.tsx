@@ -4,7 +4,7 @@ import { Sun, Moon } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 
 export const ThemeToggle: React.FC = () => {
-  const { mode, toggleTheme, isDark } = useTheme()
+  const { toggleTheme, isDark } = useTheme()
 
   return (
     <Tooltip title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}>

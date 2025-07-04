@@ -17,30 +17,16 @@ import {
   Block as BlockIcon,
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material'
-
-export interface Traveler {
-  id: number
-  name: string
-  email: string
-  phone: string
-  status: 'active' | 'inactive' | 'suspended'
-  registeredAt: string
-  lastTrip?: string
-  totalTrips?: number
-  rating?: number
-  avatar?: string
-  location?: string
-  preferences?: string[]
-}
+import { Traveler } from '../../types/traveler'
 
 interface TravelerRowProps {
   traveler: Traveler
   isSelected: boolean
-  onRowClick: (id: number) => void
+  onRowClick: (id: string) => void
   onView: (traveler: Traveler) => void
-  onEdit: (traveler: Traveler) => void
-  onDelete: (travelerId: number) => void
-  onToggleStatus: (travelerId: number) => void
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
+  onToggleStatus: (travelerId: string) => void
 }
 
 export const TravelerRow: React.FC<TravelerRowProps> = ({
@@ -186,7 +172,7 @@ export const TravelerRow: React.FC<TravelerRowProps> = ({
               color="primary"
               onClick={(e) => {
                 e.stopPropagation()
-                onEdit(traveler)
+                onEdit(traveler.id)
               }}
             >
               <EditIcon fontSize="small" />

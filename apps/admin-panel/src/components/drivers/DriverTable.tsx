@@ -14,22 +14,25 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { DriverRow, Driver } from './DriverRow'
+import { DriverRow } from './DriverRow'
+import { Driver } from '../../types/driver'
 
 interface DriverTableProps {
   drivers: Driver[]
   loading: boolean
-  selected: number[]
+  selected: string[]
   page: number
   rowsPerPage: number
   totalDrivers: number
   onSelectAll: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onRowClick: (id: number) => void
+  onRowClick: (id: string) => void
   onView: (driver: Driver) => void
-  onApprove: (driverId: number) => void
-  onReject: (driverId: number) => void
+  onApprove: (driverId: string) => void
+  onReject: (driverId: string) => void
   onChangePage: (event: unknown, newPage: number) => void
   onChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onEdit: (driver: Driver) => void
+  onDelete: (driver: Driver) => void
 }
 
 export const DriverTable: React.FC<DriverTableProps> = ({
@@ -46,8 +49,10 @@ export const DriverTable: React.FC<DriverTableProps> = ({
   onReject,
   onChangePage,
   onChangeRowsPerPage,
+  onEdit,
+  onDelete,
 }) => {
-  const isSelected = (id: number) => selected.indexOf(id) !== -1
+  const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   if (loading) {
     return (
@@ -143,6 +148,8 @@ export const DriverTable: React.FC<DriverTableProps> = ({
                 onView={onView}
                 onApprove={onApprove}
                 onReject={onReject}
+                onEdit={(id: string) => onEdit(drivers.find(d => d.id === id)!)}
+                onDelete={(id: string) => onDelete(drivers.find(d => d.id === id)!)}
               />
             ))}
           </TableBody>

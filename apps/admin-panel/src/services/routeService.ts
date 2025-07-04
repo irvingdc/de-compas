@@ -25,7 +25,6 @@ import {
   RouteFilters, 
   RouteSearchResult
 } from '../types/route'
-import { v4 as uuidv4 } from 'uuid'
 
 const COLLECTION_NAME = 'routes'
 

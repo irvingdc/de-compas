@@ -14,21 +14,22 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { TravelerRow, Traveler } from './TravelerRow'
+import { TravelerRow } from './TravelerRow'
+import { Traveler } from '../../types/traveler'
 
 interface TravelerTableProps {
   travelers: Traveler[]
   loading: boolean
-  selected: number[]
+  selected: string[]
   page: number
   rowsPerPage: number
   totalTravelers: number
   onSelectAll: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onRowClick: (id: number) => void
+  onRowClick: (id: string) => void
   onView: (traveler: Traveler) => void
   onEdit: (traveler: Traveler) => void
-  onDelete: (travelerId: number) => void
-  onToggleStatus: (travelerId: number) => void
+  onDelete: (travelerId: string) => void
+  onToggleStatus: (travelerId: string) => void
   onChangePage: (event: unknown, newPage: number) => void
   onChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -49,7 +50,7 @@ export const TravelerTable: React.FC<TravelerTableProps> = ({
   onChangePage,
   onChangeRowsPerPage,
 }) => {
-  const isSelected = (id: number) => selected.indexOf(id) !== -1
+  const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   if (loading) {
     return (
@@ -143,7 +144,7 @@ export const TravelerTable: React.FC<TravelerTableProps> = ({
                 isSelected={isSelected(traveler.id)}
                 onRowClick={onRowClick}
                 onView={onView}
-                onEdit={onEdit}
+                onEdit={(id: string) => onEdit(travelers.find(t => t.id === id)!)}
                 onDelete={onDelete}
                 onToggleStatus={onToggleStatus}
               />

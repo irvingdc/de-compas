@@ -1,22 +1,20 @@
 import React from 'react'
 import { Typography, Box, Chip } from '@mui/material'
 import { ReusableDialog, ActionButton } from '../common'
-import { Driver } from './DriverRow'
+import { Driver } from '../../types/driver'
 
 interface DriverDialogProps {
-  open: boolean
   driver: Driver | null
   onClose: () => void
-  onApprove: (driverId: number) => void
-  onReject: (driverId: number) => void
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
 }
 
 export const DriverDialog: React.FC<DriverDialogProps> = ({
-  open,
   driver,
   onClose,
-  onApprove,
-  onReject,
+  onEdit,
+  onDelete,
 }) => {
   if (!driver) return null
 
@@ -38,9 +36,12 @@ export const DriverDialog: React.FC<DriverDialogProps> = ({
     }
   }
 
+  const handleEdit = () => driver && onEdit(driver.id)
+  const handleDelete = () => driver && onDelete(driver.id)
+
   return (
     <ReusableDialog
-      open={open}
+      open={!!driver}
       onClose={onClose}
       title={`Detalles del Conductor - ${driver.name}`}
       maxWidth="md"
@@ -53,13 +54,13 @@ export const DriverDialog: React.FC<DriverDialogProps> = ({
             <>
               <ActionButton 
                 variant="danger" 
-                onClick={() => onReject(driver.id)}
+                onClick={handleDelete}
               >
                 Rechazar
               </ActionButton>
               <ActionButton 
                 variant="primary" 
-                onClick={() => onApprove(driver.id)}
+                onClick={handleEdit}
               >
                 Aprobar
               </ActionButton>

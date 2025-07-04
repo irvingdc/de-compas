@@ -63,7 +63,7 @@ export const DriverFilters: React.FC<DriverFiltersProps> = ({
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
-                color="primary"
+                className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
               >
                 Nuevo Conductor
               </Button>
@@ -105,7 +105,7 @@ export const DriverFilters: React.FC<DriverFiltersProps> = ({
             <Button
               variant="contained"
               onClick={onSearch}
-              disabled={!searchTerm.trim()}
+              className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
             >
               Buscar
             </Button>

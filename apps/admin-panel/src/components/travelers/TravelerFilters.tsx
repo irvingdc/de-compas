@@ -63,7 +63,7 @@ export const TravelerFilters: React.FC<TravelerFiltersProps> = ({
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
-                color="primary"
+                className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
               >
                 Nuevo Viajero
               </Button>
@@ -106,7 +106,7 @@ export const TravelerFilters: React.FC<TravelerFiltersProps> = ({
             <Button
               variant="contained"
               onClick={onSearch}
-              disabled={!searchTerm.trim()}
+              className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
             >
               Buscar
             </Button>

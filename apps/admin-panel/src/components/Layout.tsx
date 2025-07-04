@@ -54,9 +54,9 @@ export const Layout: React.FC = () => {
             isDark ? 'border-dark-border-secondary' : 'border-neutral-200'
           }`}>
             <img 
-              src={isDark ? "/assets/LOGO_HORIZONTAL_WHITE.png" : "/assets/LOGO_HORIZONTAL_BLACK.png"}
+              src={isDark ? "/assets/LOGO_HORIZONTAL_YELLOW.png" : "/assets/LOGO_HORIZONTAL_BLACK.png"}
               alt="De Compas" 
-              className="h-8 w-auto"
+              className="h-10 w-auto"
             />
           </div>
 

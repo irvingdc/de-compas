@@ -67,6 +67,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
               variant="contained"
               onClick={onSearch}
               startIcon={<SearchIcon />}
+              className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
             >
               Buscar
             </Button>

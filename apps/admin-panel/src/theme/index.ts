@@ -218,7 +218,6 @@ export const createCustomTheme = (mode: 'light' | 'dark') => {
       isLight ? '0 25px 50px -12px rgb(0 0 0 / 0.25)' : '0 25px 50px -12px rgb(0 0 0 / 0.5)',
       isLight ? '0 25px 50px -12px rgb(0 0 0 / 0.25)' : '0 25px 50px -12px rgb(0 0 0 / 0.5)',
       isLight ? '0 25px 50px -12px rgb(0 0 0 / 0.25)' : '0 25px 50px -12px rgb(0 0 0 / 0.5)',
-      isLight ? '0 25px 50px -12px rgb(0 0 0 / 0.25)' : '0 25px 50px -12px rgb(0 0 0 / 0.5)',
     ],
     components: {
       MuiButton: {
@@ -262,6 +261,24 @@ export const createCustomTheme = (mode: 'light' | 'dark') => {
           root: {
             boxShadow: isLight ? '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)' : '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)',
             backgroundColor: isLight ? colors.white : colors.dark.bg.card,
+            border: `1px solid ${isLight ? colors.neutral[200] : colors.dark.border.secondary}`,
+          },
+        },
+      },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            backgroundColor: isLight ? colors.white : colors.dark.bg.card,
+            color: isLight ? colors.black : colors.dark.text.primary,
+            border: `1px solid ${isLight ? colors.neutral[200] : colors.dark.border.secondary}`,
+          },
+        },
+      },
+      MuiDivider: {
+        styleOverrides: {
+          root: {
+            borderColor: isLight ? colors.neutral[300] : colors.dark.text.secondary,
+            opacity: 1,
           },
         },
       },

@@ -9,7 +9,6 @@ import {
   TableRow,
   TablePagination,
   Paper,
-  Checkbox,
   Box,
   Typography,
   CircularProgress,
@@ -20,15 +19,10 @@ import { Trip } from '../../types/trip'
 interface TripTableProps {
   trips: Trip[]
   loading: boolean
-  selected: string[]
   page: number
   rowsPerPage: number
   totalTrips: number
-  onSelectAll: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onRowClick: (id: string) => void
   onView: (trip: Trip) => void
-  onEdit: (id: string) => void
-  onDelete: (id: string) => void
   onChangePage: (event: unknown, newPage: number) => void
   onChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -36,20 +30,13 @@ interface TripTableProps {
 export const TripTable: React.FC<TripTableProps> = ({
   trips,
   loading,
-  selected,
   page,
   rowsPerPage,
   totalTrips,
-  onSelectAll,
-  onRowClick,
   onView,
-  onEdit,
-  onDelete,
   onChangePage,
   onChangeRowsPerPage,
 }) => {
-  const isSelected = (id: string) => selected.indexOf(id) !== -1
-
   if (loading) {
     return (
       <Card>
@@ -89,30 +76,9 @@ export const TripTable: React.FC<TripTableProps> = ({
           <TableHead>
             <TableRow>
               <TableCell 
-                padding="checkbox"
                 sx={{
                   position: 'sticky',
                   left: 0,
-                  zIndex: 3,
-                  backgroundColor: 'background.paper',
-                  borderRight: '1px solid',
-                  borderColor: 'divider',
-                  minWidth: 48,
-                  maxWidth: 48,
-                  width: 48
-                }}
-              >
-                <Checkbox
-                  color="primary"
-                  indeterminate={selected.length > 0 && selected.length < trips.length}
-                  checked={trips.length > 0 && selected.length === trips.length}
-                  onChange={onSelectAll}
-                />
-              </TableCell>
-              <TableCell 
-                sx={{
-                  position: 'sticky',
-                  left: 48,
                   zIndex: 3,
                   backgroundColor: 'background.paper',
                   borderRight: '1px solid',
@@ -129,7 +95,7 @@ export const TripTable: React.FC<TripTableProps> = ({
               <TableCell sx={{ minWidth: 100 }}>Precio</TableCell>
               <TableCell sx={{ minWidth: 120 }}>Fecha</TableCell>
               <TableCell 
-                sx={{ minWidth: 150 }}
+                sx={{ minWidth: 80 }}
               >
                 Acciones
               </TableCell>
@@ -140,11 +106,7 @@ export const TripTable: React.FC<TripTableProps> = ({
               <TripRow
                 key={trip.id}
                 trip={trip}
-                isSelected={isSelected(trip.id)}
-                onRowClick={onRowClick}
                 onView={onView}
-                onEdit={onEdit}
-                onDelete={onDelete}
               />
             ))}
           </TableBody>

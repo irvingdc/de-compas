@@ -6,15 +6,11 @@ import { Trip } from '../../types/trip'
 interface TripDialogProps {
   trip: Trip | null
   onClose: () => void
-  onEdit: (id: string) => void
-  onDelete: (id: string) => void
 }
 
 export const TripDialog: React.FC<TripDialogProps> = ({
   trip,
   onClose,
-  onEdit,
-  onDelete,
 }) => {
   if (!trip) return null
 
@@ -51,14 +47,6 @@ export const TripDialog: React.FC<TripDialogProps> = ({
     })
   }
 
-  const formatTime = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleTimeString('es-MX', {
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
-
   const getPaymentMethodText = (method: string): string => {
     switch (method) {
       case 'cash': return 'Efectivo'
@@ -86,9 +74,6 @@ export const TripDialog: React.FC<TripDialogProps> = ({
     }
   }
 
-  const handleEdit = () => trip && onEdit(trip.id)
-  const handleDelete = () => trip && onDelete(trip.id)
-
   return (
     <ReusableDialog
       open={!!trip}
@@ -96,17 +81,9 @@ export const TripDialog: React.FC<TripDialogProps> = ({
       title={`Detalles del Viaje - ${trip.routeName}`}
       maxWidth="lg"
       actions={
-        <>
-          <ActionButton variant="secondary" onClick={onClose}>
-            Cerrar
-          </ActionButton>
-          <ActionButton variant="primary" onClick={handleEdit}>
-            Editar
-          </ActionButton>
-          <ActionButton variant="danger" onClick={handleDelete}>
-            Eliminar
-          </ActionButton>
-        </>
+        <ActionButton variant="secondary" onClick={onClose}>
+          Cerrar
+        </ActionButton>
       }
     >
       <Box className="space-y-6">
@@ -209,7 +186,7 @@ export const TripDialog: React.FC<TripDialogProps> = ({
             </Box>
           ) : (
             <Box className="space-y-3">
-              {trip.passengers.map((passenger, index) => (
+              {trip.passengers.map((passenger) => (
                 <Box key={passenger.id} className="bg-neutral-50 dark:bg-dark-bg-hover p-4 rounded-lg">
                   <Box className="flex items-center justify-between mb-2">
                     <Box className="flex items-center space-x-3">

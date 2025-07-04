@@ -10,12 +10,10 @@ import {
   MenuItem,
   TextField,
   Box,
-  Typography,
 } from '@mui/material'
 import {
   Add as AddIcon,
   FilterList as FilterListIcon,
-  Delete as DeleteIcon,
 } from '@mui/icons-material'
 import { TripFilters as TripFiltersType } from '../../types/trip'
 
@@ -23,24 +21,20 @@ interface TripFiltersProps {
   filters: TripFiltersType
   searchTerm: string
   showFilters: boolean
-  selectedCount: number
   onFiltersChange: (filters: TripFiltersType) => void
   onSearchTermChange: (term: string) => void
   onSearch: () => void
   onToggleFilters: () => void
-  onDeleteSelected: () => void
 }
 
 export const TripFilters: React.FC<TripFiltersProps> = ({
   filters,
   searchTerm,
   showFilters,
-  selectedCount,
   onFiltersChange,
   onSearchTermChange,
   onSearch,
   onToggleFilters,
-  onDeleteSelected,
 }) => {
   const handleFilterChange = (key: keyof TripFiltersType, value: any) => {
     onFiltersChange({
@@ -144,30 +138,6 @@ export const TripFilters: React.FC<TripFiltersProps> = ({
                 fullWidth
                 InputLabelProps={{ shrink: true }}
               />
-            </Box>
-          )}
-
-          {/* Acciones en lote */}
-          {selectedCount > 0 && (
-            <Box
-              className="flex items-center space-x-2 p-2 rounded"
-              sx={{
-                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.default' : 'primary.50',
-                color: (theme) => theme.palette.mode === 'dark' ? 'text.primary' : 'inherit',
-                border: (theme) => theme.palette.mode === 'dark' ? '1px solid ' + theme.palette.divider : undefined
-              }}
-            >
-              <Typography variant="body2" color="text.secondary" sx={{ color: 'inherit' }}>
-                {selectedCount} viajes seleccionados
-              </Typography>
-              <Button
-                size="small"
-                color="error"
-                onClick={onDeleteSelected}
-                startIcon={<DeleteIcon />}
-              >
-                Eliminar seleccionados
-              </Button>
             </Box>
           )}
         </Stack>

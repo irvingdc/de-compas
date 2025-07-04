@@ -2,7 +2,6 @@ import React from 'react'
 import {
   TableRow,
   TableCell,
-  Checkbox,
   Typography,
   Box,
   Chip,
@@ -11,9 +10,6 @@ import {
 } from '@mui/material'
 import {
   Visibility as VisibilityIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  DirectionsCar as CarIcon,
   Person as PersonIcon,
   Schedule as ScheduleIcon,
   LocationOn as LocationIcon,
@@ -22,20 +18,12 @@ import { Trip } from '../../types/trip'
 
 interface TripRowProps {
   trip: Trip
-  isSelected: boolean
-  onRowClick: (id: string) => void
   onView: (trip: Trip) => void
-  onEdit: (id: string) => void
-  onDelete: (id: string) => void
 }
 
 export const TripRow: React.FC<TripRowProps> = ({
   trip,
-  isSelected,
-  onRowClick,
   onView,
-  onEdit,
-  onDelete,
 }) => {
   const getStatusColor = (status: string): 'default' | 'success' | 'warning' | 'error' | 'info' => {
     switch (status) {
@@ -78,16 +66,6 @@ export const TripRow: React.FC<TripRowProps> = ({
     })
   }
 
-  const handleEdit = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onEdit(trip.id)
-  }
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onDelete(trip.id)
-  }
-
   const handleView = (e: React.MouseEvent) => {
     e.stopPropagation()
     onView(trip)
@@ -96,22 +74,9 @@ export const TripRow: React.FC<TripRowProps> = ({
   return (
     <TableRow
       hover
-      role="checkbox"
-      aria-checked={isSelected}
-      tabIndex={-1}
-      key={trip.id}
-      selected={isSelected}
-      onClick={() => onRowClick(trip.id)}
+      onClick={() => onView(trip)}
       sx={{ cursor: 'pointer' }}
     >
-      <TableCell padding="checkbox">
-        <Checkbox
-          color="primary"
-          checked={isSelected}
-          onClick={(e) => e.stopPropagation()}
-        />
-      </TableCell>
-      
       {/* Ruta */}
       <TableCell>
         <Box>
@@ -192,7 +157,7 @@ export const TripRow: React.FC<TripRowProps> = ({
 
       {/* Acciones */}
       <TableCell align="right">
-        <Box className="flex items-center justify-end space-x-1">
+        <Box className="flex items-center justify-end">
           <Tooltip title="Ver detalles">
             <IconButton
               size="small"
@@ -200,24 +165,6 @@ export const TripRow: React.FC<TripRowProps> = ({
               className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
             >
               <VisibilityIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Editar">
-            <IconButton
-              size="small"
-              onClick={handleEdit}
-              className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Eliminar">
-            <IconButton
-              size="small"
-              onClick={handleDelete}
-              className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-            >
-              <DeleteIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         </Box>

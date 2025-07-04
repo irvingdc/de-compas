@@ -169,7 +169,6 @@ export interface UseTripsState {
   trips: Trip[]
   loading: boolean
   error: string | null
-  selected: string[]
   
   // Paginación
   page: number
@@ -186,12 +185,6 @@ export interface UseTripsActions {
   // Datos
   loadTrips: () => Promise<void>
   handleSearch: () => Promise<void>
-  handleDeleteTrip: (tripId: string) => Promise<void>
-  handleDeleteMultiple: () => Promise<void>
-  
-  // Selección
-  handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
-  handleRowClick: (id: string) => void
   
   // Paginación
   handleChangePage: (event: unknown, newPage: number) => void
@@ -203,9 +196,6 @@ export interface UseTripsActions {
   setShowFilters: (show: boolean) => void
   
   // Estados
-  setSelectedTrip: (trip: Trip | null) => void
-  setViewDialogOpen: (open: boolean) => void
-  closeSnackbar: () => void
   setError: (error: string | null) => void
 }
 
@@ -213,7 +203,6 @@ export const useTrips = (): UseTripsState & UseTripsActions => {
   const [trips, setTrips] = useState<Trip[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selected, setSelected] = useState<string[]>([])
   
   // Paginación
   const [page, setPage] = useState(0)
@@ -224,25 +213,6 @@ export const useTrips = (): UseTripsState & UseTripsActions => {
   const [filters, setFilters] = useState<TripFilters>({})
   const [searchTerm, setSearchTerm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
-  
-  // Estados para diálogos
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null)
-  const [viewDialogOpen, setViewDialogOpen] = useState(false)
-  
-  // Snackbar
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: '',
-    severity: 'success' as 'success' | 'error' | 'warning' | 'info'
-  })
-
-  const showSnackbar = (message: string, severity: 'success' | 'error' | 'warning' | 'info' = 'success') => {
-    setSnackbar({ open: true, message, severity })
-  }
-
-  const closeSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }))
-  }
 
   // Cargar viajes
   const loadTrips = async () => {
@@ -299,70 +269,8 @@ export const useTrips = (): UseTripsState & UseTripsActions => {
     await loadTrips()
   }
 
-  // Eliminar viaje
-  const handleDeleteTrip = async (tripId: string) => {
-    try {
-      // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      setTrips(prev => prev.filter(trip => trip.id !== tripId))
-      setSelected(prev => prev.filter(id => id !== tripId))
-      
-      showSnackbar('Viaje eliminado exitosamente', 'success')
-    } catch (err) {
-      showSnackbar('Error al eliminar el viaje', 'error')
-      console.error('Error deleting trip:', err)
-    }
-  }
-
-  // Eliminar múltiples
-  const handleDeleteMultiple = async () => {
-    try {
-      // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      setTrips(prev => prev.filter(trip => !selected.includes(trip.id)))
-      setSelected([])
-      
-      showSnackbar(`${selected.length} viajes eliminados exitosamente`, 'success')
-    } catch (err) {
-      showSnackbar('Error al eliminar los viajes', 'error')
-      console.error('Error deleting multiple trips:', err)
-    }
-  }
-
-  // Selección
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = trips.map((trip) => trip.id)
-      setSelected(newSelected)
-      return
-    }
-    setSelected([])
-  }
-
-  const handleRowClick = (id: string) => {
-    const selectedIndex = selected.indexOf(id)
-    let newSelected: string[] = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      )
-    }
-
-    setSelected(newSelected)
-  }
-
   // Paginación
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage)
   }
 
@@ -381,7 +289,6 @@ export const useTrips = (): UseTripsState & UseTripsActions => {
     trips,
     loading,
     error,
-    selected,
     page,
     rowsPerPage,
     totalTrips,
@@ -392,18 +299,11 @@ export const useTrips = (): UseTripsState & UseTripsActions => {
     // Acciones
     loadTrips,
     handleSearch,
-    handleDeleteTrip,
-    handleDeleteMultiple,
-    handleSelectAllClick,
-    handleRowClick,
     handleChangePage,
     handleChangeRowsPerPage,
     setFilters,
     setSearchTerm,
     setShowFilters,
-    setSelectedTrip,
-    setViewDialogOpen,
-    closeSnackbar,
     setError,
   }
 } 

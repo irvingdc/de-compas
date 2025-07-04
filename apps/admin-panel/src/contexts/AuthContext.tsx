@@ -29,9 +29,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user)
-        // Check if user has admin role
+        // Check if user has admin role via Custom Claims
         const idTokenResult = await user.getIdTokenResult()
-        setIsAdmin(idTokenResult.claims.role === 'admin')
+        const hasAdminClaim = idTokenResult.claims.role === 'admin'
+        
+        setIsAdmin(hasAdminClaim)
       } else {
         setUser(null)
         setIsAdmin(false)

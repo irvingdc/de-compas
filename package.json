@@ -17,7 +17,11 @@
     "lint": "npm run lint --workspaces",
     "test": "npm run test --workspaces",
     "firebase:emulators": "firebase emulators:start",
-    "firebase:deploy": "firebase deploy"
+    "firebase:deploy": "firebase deploy",
+    "functions:serve": "cd functions && npm run serve",
+    "functions:deploy": "cd functions && npm run deploy",
+    "functions:logs": "cd functions && npm run logs",
+    "init-admin": "node scripts/init-admin.js"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -27,5 +31,9 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "firebase": "^11.10.0"
   }
-} 
+}

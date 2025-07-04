@@ -1,0 +1,12 @@
+{
+  "name": "decompas-scripts",
+  "version": "1.0.0",
+  "description": "Scripts de administración para De Compas",
+  "main": "create-admin.js",
+  "scripts": {
+    "create-admin": "node create-admin.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+} 

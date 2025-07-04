@@ -18,4 +18,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
+  // Configure environment variables to load from project root
+  envDir: '../../',
 }) 

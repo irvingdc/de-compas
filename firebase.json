@@ -5,7 +5,7 @@
     "runtime": "nodejs20"
   },
   "hosting": {
-    "site": "decompas-admin",
+    "site": "de-compas-dev",
     "public": "apps/admin-panel/dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [

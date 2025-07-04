@@ -43,15 +43,22 @@ npm install
 ### 3. Configurar Firebase
 1. Crear un proyecto en Firebase Console
 2. Habilitar servicios: Auth, Firestore, Functions, Storage, Hosting
-3. Crear archivo `.env` en la raíz del proyecto:
+3. Crear archivo `.env` en la raíz del proyecto (copia de `.env.example`):
+```bash
+cp .env.example .env
+```
+4. Completar las variables en `.env` con los valores de tu proyecto Firebase:
 ```env
 VITE_FIREBASE_API_KEY=your-api-key-here
 VITE_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
+VITE_FIREBASE_STORAGE_BUCKET=your-project-id.firebasestorage.app
 VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
+VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
 ```
+
+⚠️ **IMPORTANTE**: Nunca commitees el archivo `.env` al repositorio. Solo commitea `.env.example`.
 
 ### 4. Configurar Firebase CLI
 ```bash

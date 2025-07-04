@@ -70,13 +70,35 @@ export const DriverRow: React.FC<DriverRowProps> = ({
       selected={isSelected}
       sx={{ cursor: 'pointer' }}
     >
-      <TableCell padding="checkbox">
+      <TableCell 
+        padding="checkbox"
+        sx={{
+          position: 'sticky',
+          left: 0,
+          zIndex: 2,
+          backgroundColor: 'background.paper',
+          borderRight: '1px solid',
+          borderColor: 'divider',
+          minWidth: 48,
+          maxWidth: 48,
+          width: 48
+        }}
+      >
         <Checkbox
           color="primary"
           checked={isSelected}
         />
       </TableCell>
-      <TableCell>
+      <TableCell
+        sx={{
+          position: 'sticky',
+          left: 48,
+          zIndex: 2,
+          backgroundColor: 'background.paper',
+          borderRight: '1px solid',
+          borderColor: 'divider'
+        }}
+      >
         <Box>
           <Typography variant="body2" fontWeight="medium">
             {driver.name}
@@ -121,7 +143,9 @@ export const DriverRow: React.FC<DriverRowProps> = ({
           <span className="ml-1">⭐</span>
         </Box>
       </TableCell>
-      <TableCell>
+      <TableCell
+        sx={{ minWidth: 150 }}
+      >
         <Box className="flex space-x-1">
           <Tooltip title="Ver detalles">
             <IconButton

@@ -53,11 +53,34 @@ export const RouteTable: React.FC<RouteTableProps> = ({
 
   return (
     <Card>
-      <TableContainer component={Paper} className="shadow-none">
-        <Table>
+      <TableContainer 
+        component={Paper} 
+        className="shadow-none"
+        sx={{
+          maxHeight: 600,
+          overflowX: 'auto',
+          '& .MuiTable-root': {
+            minWidth: 900, // Ancho mínimo para forzar scroll
+          }
+        }}
+      >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell 
+                padding="checkbox"
+                sx={{
+                  position: 'sticky',
+                  left: 0,
+                  zIndex: 3,
+                  backgroundColor: 'background.paper',
+                  borderRight: '1px solid',
+                  borderColor: 'divider',
+                  minWidth: 48,
+                  maxWidth: 48,
+                  width: 48
+                }}
+              >
                 <Checkbox
                   color="primary"
                   indeterminate={selected.length > 0 && selected.length < routes.length}
@@ -65,11 +88,27 @@ export const RouteTable: React.FC<RouteTableProps> = ({
                   onChange={onSelectAll}
                 />
               </TableCell>
-              <TableCell>Ruta</TableCell>
-              <TableCell>Precio</TableCell>
-              <TableCell>Duración</TableCell>
-              <TableCell>Estado</TableCell>
-              <TableCell>Acciones</TableCell>
+              <TableCell 
+                sx={{
+                  position: 'sticky',
+                  left: 48,
+                  zIndex: 3,
+                  backgroundColor: 'background.paper',
+                  borderRight: '1px solid',
+                  borderColor: 'divider',
+                  minWidth: 200
+                }}
+              >
+                Ruta
+              </TableCell>
+              <TableCell sx={{ minWidth: 120 }}>Precio</TableCell>
+              <TableCell sx={{ minWidth: 120 }}>Duración</TableCell>
+              <TableCell sx={{ minWidth: 120 }}>Estado</TableCell>
+              <TableCell 
+                sx={{ minWidth: 150 }}
+              >
+                Acciones
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

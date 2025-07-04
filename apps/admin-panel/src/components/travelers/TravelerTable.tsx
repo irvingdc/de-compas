@@ -75,11 +75,34 @@ export const TravelerTable: React.FC<TravelerTableProps> = ({
 
   return (
     <Card>
-      <TableContainer component={Paper} className="shadow-none">
-        <Table>
+      <TableContainer 
+        component={Paper} 
+        className="shadow-none"
+        sx={{
+          maxHeight: 600,
+          overflowX: 'auto',
+          '& .MuiTable-root': {
+            minWidth: 1000, // Ancho mínimo para forzar scroll
+          }
+        }}
+      >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell 
+                padding="checkbox"
+                sx={{
+                  position: 'sticky',
+                  left: 0,
+                  zIndex: 3,
+                  backgroundColor: 'background.paper',
+                  borderRight: '1px solid',
+                  borderColor: 'divider',
+                  minWidth: 48,
+                  maxWidth: 48,
+                  width: 48
+                }}
+              >
                 <Checkbox
                   color="primary"
                   indeterminate={selected.length > 0 && selected.length < travelers.length}
@@ -87,14 +110,29 @@ export const TravelerTable: React.FC<TravelerTableProps> = ({
                   onChange={onSelectAll}
                 />
               </TableCell>
-              <TableCell>Viajero</TableCell>
-              <TableCell>Contacto</TableCell>
-              <TableCell>Estado</TableCell>
-
-              <TableCell>Viajes</TableCell>
-              <TableCell>Calificación</TableCell>
-              <TableCell>Ubicación</TableCell>
-              <TableCell>Acciones</TableCell>
+              <TableCell 
+                sx={{
+                  position: 'sticky',
+                  left: 48,
+                  zIndex: 3,
+                  backgroundColor: 'background.paper',
+                  borderRight: '1px solid',
+                  borderColor: 'divider',
+                  minWidth: 200
+                }}
+              >
+                Viajero
+              </TableCell>
+              <TableCell sx={{ minWidth: 180 }}>Contacto</TableCell>
+              <TableCell sx={{ minWidth: 120 }}>Estado</TableCell>
+              <TableCell sx={{ minWidth: 120 }}>Viajes</TableCell>
+              <TableCell sx={{ minWidth: 120 }}>Calificación</TableCell>
+              <TableCell sx={{ minWidth: 150 }}>Ubicación</TableCell>
+              <TableCell 
+                sx={{ minWidth: 150 }}
+              >
+                Acciones
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

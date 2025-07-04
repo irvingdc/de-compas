@@ -141,8 +141,15 @@ export const TravelerFilters: React.FC<TravelerFiltersProps> = ({
 
           {/* Acciones en lote */}
           {selectedCount > 0 && (
-            <Box className="flex items-center space-x-2 p-2 bg-blue-50 rounded">
-              <Typography variant="body2" color="text.secondary">
+            <Box
+              className="flex items-center space-x-2 p-2 rounded"
+              sx={{
+                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.default' : 'primary.50',
+                color: (theme) => theme.palette.mode === 'dark' ? 'text.primary' : 'inherit',
+                border: (theme) => theme.palette.mode === 'dark' ? '1px solid ' + theme.palette.divider : undefined
+              }}
+            >
+              <Typography variant="body2" color="text.secondary" sx={{ color: 'inherit' }}>
                 {selectedCount} viajeros seleccionados
               </Typography>
               <Button

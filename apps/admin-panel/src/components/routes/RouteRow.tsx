@@ -53,13 +53,35 @@ export const RouteRow: React.FC<RouteRowProps> = ({
       selected={isSelected}
       sx={{ cursor: 'pointer' }}
     >
-      <TableCell padding="checkbox">
+      <TableCell 
+        padding="checkbox"
+        sx={{
+          position: 'sticky',
+          left: 0,
+          zIndex: 2,
+          backgroundColor: 'background.paper',
+          borderRight: '1px solid',
+          borderColor: 'divider',
+          minWidth: 48,
+          maxWidth: 48,
+          width: 48
+        }}
+      >
         <Checkbox
           color="primary"
           checked={isSelected}
         />
       </TableCell>
-      <TableCell>
+      <TableCell
+        sx={{
+          position: 'sticky',
+          left: 48,
+          zIndex: 2,
+          backgroundColor: 'background.paper',
+          borderRight: '1px solid',
+          borderColor: 'divider'
+        }}
+      >
         <Box className="flex items-center">
           <RouteIcon className="mr-2 text-gray-400" />
           <Box>
@@ -90,7 +112,10 @@ export const RouteRow: React.FC<RouteRowProps> = ({
           variant="outlined"
         />
       </TableCell>
-      <TableCell>
+      <TableCell
+        // Elimino sticky de acciones
+        sx={{ minWidth: 150 }}
+      >
         <Box className="flex space-x-1">
           <Tooltip title="Ver detalles">
             <IconButton

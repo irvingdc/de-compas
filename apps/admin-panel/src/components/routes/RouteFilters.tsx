@@ -60,7 +60,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
               size="small"
               className="flex-1"
               InputProps={{
-                startAdornment: <SearchIcon className="mr-2 text-gray-400" />,
+                startAdornment: <SearchIcon className="mr-2 text-gray-400 dark:text-dark-text-muted" />,
               }}
             />
             <Button

@@ -1,5 +1,21 @@
 import React from 'react'
-import { Users, UserCheck, Car, DollarSign, AlertTriangle, TrendingUp } from 'lucide-react'
+import { 
+  Box, 
+  Typography, 
+  Card, 
+  CardContent, 
+  Chip,
+  Button,
+  Divider
+} from '@mui/material'
+import { 
+  Users, 
+  UserCheck, 
+  Car, 
+  DollarSign, 
+  AlertTriangle, 
+  TrendingUp 
+} from 'lucide-react'
 
 export const Dashboard: React.FC = () => {
   // Mock data - replace with real data from Firebase
@@ -55,99 +71,147 @@ export const Dashboard: React.FC = () => {
     },
   ]
 
+  const getAlertColor = (type: string) => {
+    switch (type) {
+      case 'incident':
+        return 'error'
+      case 'pending':
+        return 'warning'
+      case 'cancelled':
+        return 'default'
+      default:
+        return 'default'
+    }
+  }
+
+  const getAlertText = (type: string) => {
+    switch (type) {
+      case 'incident':
+        return 'Incidente'
+      case 'pending':
+        return 'Pendiente'
+      case 'cancelled':
+        return 'Cancelado'
+      default:
+        return type
+    }
+  }
+
   return (
-    <div className="space-y-6">
+    <Box className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-brand-black">Dashboard</h1>
-        <p className="text-secondary-600">Bienvenido al panel administrativo de De Compas</p>
-      </div>
+      <Box>
+        <Typography variant="h4" component="h1" fontWeight="bold" className="text-brand-black dark:text-dark-text-primary">
+          Dashboard
+        </Typography>
+        <Typography variant="body1" className="text-secondary-600 dark:text-dark-text-secondary">
+          Bienvenido al panel administrativo de De Compas
+        </Typography>
+      </Box>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <Box className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
-            <div key={stat.name} className="bg-white dark:bg-dark-bg-card overflow-hidden shadow rounded-lg border border-neutral-200 dark:border-dark-border-secondary">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
+            <Card key={stat.name}>
+              <CardContent>
+                <Box className="flex items-center">
+                  <Box className="flex-shrink-0">
                     <Icon className="h-6 w-6 text-secondary-400 dark:text-dark-text-muted" />
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-secondary-500 dark:text-dark-text-secondary truncate">
-                        {stat.name}
-                      </dt>
-                      <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-brand-black dark:text-dark-text-primary">
-                          {stat.value}
-                        </div>
-                        <div className="ml-2 flex items-baseline text-sm font-semibold text-success-600 dark:text-success-400">
-                          <TrendingUp className="h-4 w-4 text-success-500 dark:text-success-400" />
+                  </Box>
+                  <Box className="ml-5 w-0 flex-1">
+                    <Typography variant="body2" color="text.secondary" className="truncate">
+                      {stat.name}
+                    </Typography>
+                    <Box className="flex items-baseline">
+                      <Typography variant="h4" component="div" fontWeight="semibold" className="text-brand-black dark:text-dark-text-primary">
+                        {stat.value}
+                      </Typography>
+                      <Box className="ml-2 flex items-baseline">
+                        <TrendingUp className="h-4 w-4 text-success-500 dark:text-success-400" />
+                        <Typography variant="body2" color="success.main" fontWeight="semibold" className="ml-1">
                           {stat.change}
-                        </div>
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
           )
         })}
-      </div>
+      </Box>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+      <Box className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {/* Recent Alerts */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">Alertas Recientes</h3>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {recentAlerts.map((alert) => (
-              <div key={alert.id} className="px-6 py-4 flex items-center space-x-3">
-                <div className="flex-shrink-0">
-                  <AlertTriangle className="h-5 w-5 text-amber-500" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-900">{alert.message}</p>
-                  <p className="text-xs text-gray-500">{alert.time}</p>
-                </div>
-                <div className="flex-shrink-0">
-                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                    alert.type === 'incident' 
-                      ? 'bg-red-100 text-red-800'
-                      : alert.type === 'pending'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {alert.type === 'incident' ? 'Incidente' : 
-                     alert.type === 'pending' ? 'Pendiente' : 'Cancelado'}
-                  </span>
-                </div>
-              </div>
+        <Card>
+          <Box className="px-6 py-4 border-b border-divider">
+            <Typography variant="h6" component="h3" className="text-brand-black dark:text-dark-text-primary">
+              Alertas Recientes
+            </Typography>
+          </Box>
+          <Box>
+            {recentAlerts.map((alert, index) => (
+              <Box key={alert.id}>
+                <Box className="px-6 py-4 flex items-center space-x-3">
+                  <Box className="flex-shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-amber-500" />
+                  </Box>
+                  <Box className="flex-1 min-w-0">
+                    <Typography variant="body2" className="text-brand-black dark:text-dark-text-primary">
+                      {alert.message}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {alert.time}
+                    </Typography>
+                  </Box>
+                  <Box className="flex-shrink-0">
+                    <Chip 
+                      label={getAlertText(alert.type)}
+                      color={getAlertColor(alert.type) as any}
+                      size="small"
+                    />
+                  </Box>
+                </Box>
+                {index < recentAlerts.length - 1 && <Divider />}
+              </Box>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Card>
 
         {/* Quick Actions */}
-        <div className="bg-white shadow rounded-lg border border-neutral-200">
-          <div className="px-6 py-4 border-b border-neutral-200">
-            <h3 className="text-lg font-medium text-brand-black">Acciones Rápidas</h3>
-          </div>
-          <div className="p-6 space-y-4">
-            <button className="w-full bg-primary-500 text-brand-black py-2 px-4 rounded-md hover:bg-primary-600 transition-colors font-medium">
+        <Card>
+          <Box className="px-6 py-4 border-b border-divider">
+            <Typography variant="h6" component="h3" className="text-brand-black dark:text-dark-text-primary">
+              Acciones Rápidas
+            </Typography>
+          </Box>
+          <Box className="p-6 space-y-4">
+            <Button 
+              variant="contained" 
+              fullWidth 
+              className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
+            >
               Crear Nueva Ruta
-            </button>
-            <button className="w-full bg-secondary-800 text-white py-2 px-4 rounded-md hover:bg-secondary-900 transition-colors font-medium">
+            </Button>
+            <Button 
+              variant="contained" 
+              fullWidth 
+              className="bg-secondary-800 text-white hover:bg-secondary-900"
+            >
               Revisar Conductores Pendientes
-            </button>
-            <button className="w-full border border-neutral-300 text-secondary-800 py-2 px-4 rounded-md hover:bg-neutral-50 transition-colors font-medium">
+            </Button>
+            <Button 
+              variant="outlined" 
+              fullWidth 
+              className="border-neutral-300 text-secondary-800 hover:bg-neutral-50 dark:border-dark-border-primary dark:text-dark-text-primary dark:hover:bg-dark-bg-hover"
+            >
               Generar Reporte Mensual
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Box>
+        </Card>
+      </Box>
+    </Box>
   )
 } 

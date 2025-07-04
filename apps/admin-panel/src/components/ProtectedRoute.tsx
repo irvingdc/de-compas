@@ -54,7 +54,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
             </button>
           </div>
           
-          <div className="mt-6 text-xs text-gray-500">
+          <div className="mt-6 text-xs text-gray-500 dark:text-dark-text-secondary">
             <p>Si crees que esto es un error, contacta al administrador.</p>
           </div>
         </div>

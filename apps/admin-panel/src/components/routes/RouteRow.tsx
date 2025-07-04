@@ -83,7 +83,7 @@ export const RouteRow: React.FC<RouteRowProps> = ({
         }}
       >
         <Box className="flex items-center">
-          <RouteIcon className="mr-2 text-gray-400" />
+          <RouteIcon className="mr-2 text-gray-400 dark:text-dark-text-muted" />
           <Box>
             <Typography variant="body2" fontWeight="medium">
               {route.name}

@@ -15,18 +15,15 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [mode, setMode] = useState<ThemeMode>('light')
+  const [mode, setMode] = useState<ThemeMode>('dark') // Tema por defecto: dark
 
   useEffect(() => {
-    // Cargar tema desde localStorage o detectar preferencia del sistema
+    // Cargar tema desde localStorage
     const savedTheme = localStorage.getItem('decompas-theme') as ThemeMode
-    if (savedTheme) {
+    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
       setMode(savedTheme)
-    } else {
-      // Detectar preferencia del sistema
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      setMode(prefersDark ? 'dark' : 'light')
     }
+    // Si no hay tema guardado, se mantiene el tema por defecto (dark)
   }, [])
 
   useEffect(() => {

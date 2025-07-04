@@ -9,10 +9,6 @@ import {
   Tooltip,
   Button,
   Stack,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   FormControl,
   InputLabel,
   Select,
@@ -34,6 +30,7 @@ import {
   Add as AddIcon,
   FilterList as FilterListIcon,
 } from '@mui/icons-material'
+import { ConfirmationDialog, ReusableDialog, ActionButton } from '../components/common'
 
 interface Driver {
   id: number
@@ -55,6 +52,11 @@ export const Drivers: React.FC = () => {
   const [selected, setSelected] = React.useState<number[]>([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  
+  // Estados para diálogos de confirmación
+  const [approveDialogOpen, setApproveDialogOpen] = React.useState(false)
+  const [rejectDialogOpen, setRejectDialogOpen] = React.useState(false)
+  const [driverToAction, setDriverToAction] = React.useState<Driver | null>(null)
 
   const drivers: Driver[] = [
     {
@@ -101,13 +103,37 @@ export const Drivers: React.FC = () => {
   }
 
   const handleApproveDriver = (driverId: number) => {
-    console.log('Approving driver:', driverId)
-    // Aquí iría la lógica para aprobar el conductor
+    const driver = drivers.find(d => d.id === driverId)
+    if (driver) {
+      setDriverToAction(driver)
+      setApproveDialogOpen(true)
+    }
   }
 
   const handleRejectDriver = (driverId: number) => {
-    console.log('Rejecting driver:', driverId)
-    // Aquí iría la lógica para rechazar el conductor
+    const driver = drivers.find(d => d.id === driverId)
+    if (driver) {
+      setDriverToAction(driver)
+      setRejectDialogOpen(true)
+    }
+  }
+
+  const handleConfirmApprove = () => {
+    if (driverToAction) {
+      console.log('Approving driver:', driverToAction.id)
+      // Aquí iría la lógica para aprobar el conductor
+      setApproveDialogOpen(false)
+      setDriverToAction(null)
+    }
+  }
+
+  const handleConfirmReject = () => {
+    if (driverToAction) {
+      console.log('Rejecting driver:', driverToAction.id)
+      // Aquí iría la lógica para rechazar el conductor
+      setRejectDialogOpen(false)
+      setDriverToAction(null)
+    }
   }
 
   const getStatusColor = (status: string): 'default' | 'success' | 'warning' | 'error' => {
@@ -372,70 +398,97 @@ export const Drivers: React.FC = () => {
       </Card>
 
       {/* Driver Details Dialog */}
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="md" fullWidth>
-        <DialogTitle>
-          <Typography variant="h6">
-            Detalles del Conductor - {selectedDriver?.name}
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          {selectedDriver && (
-            <Box className="space-y-4 mt-4">
-              <Stack direction="row" spacing={4}>
-                <Box className="flex-1">
-                  <Typography variant="subtitle2" className="text-gray-600">
-                    Información Personal
-                  </Typography>
-                  <Box className="mt-2 space-y-2">
-                    <Typography><strong>Nombre:</strong> {selectedDriver.name}</Typography>
-                    <Typography><strong>Email:</strong> {selectedDriver.email}</Typography>
-                    <Typography><strong>Teléfono:</strong> {selectedDriver.phone}</Typography>
-                    <Typography><strong>Licencia:</strong> {selectedDriver.licenseNumber}</Typography>
+      <ReusableDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        title={`Detalles del Conductor - ${selectedDriver?.name}`}
+        maxWidth="md"
+        actions={
+          <>
+            <ActionButton variant="secondary" onClick={() => setDialogOpen(false)}>
+              Cerrar
+            </ActionButton>
+            {selectedDriver?.status === 'pending' && (
+              <>
+                <ActionButton 
+                  variant="danger" 
+                  onClick={() => handleRejectDriver(selectedDriver.id)}
+                >
+                  Rechazar
+                </ActionButton>
+                <ActionButton 
+                  variant="primary" 
+                  onClick={() => handleApproveDriver(selectedDriver.id)}
+                >
+                  Aprobar
+                </ActionButton>
+              </>
+            )}
+          </>
+        }
+      >
+        {selectedDriver && (
+          <Box className="space-y-4">
+            <Box className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Box>
+                <Typography variant="h6" className="font-bold text-brand-black dark:text-dark-text-primary mb-3">
+                  Información Personal
+                </Typography>
+                <Box className="space-y-2">
+                  <Typography><strong>Nombre:</strong> {selectedDriver.name}</Typography>
+                  <Typography><strong>Email:</strong> {selectedDriver.email}</Typography>
+                  <Typography><strong>Teléfono:</strong> {selectedDriver.phone}</Typography>
+                  <Typography><strong>Licencia:</strong> {selectedDriver.licenseNumber || 'No especificada'}</Typography>
+                  <Typography><strong>Registrado:</strong> {selectedDriver.registeredAt}</Typography>
+                </Box>
+              </Box>
+              <Box>
+                <Typography variant="h6" className="font-bold text-brand-black dark:text-dark-text-primary mb-3">
+                  Información del Vehículo
+                </Typography>
+                <Box className="space-y-2">
+                  <Typography><strong>Tipo:</strong> {selectedDriver.vehicleType || 'No especificado'}</Typography>
+                  <Typography><strong>Calificación:</strong> {selectedDriver.rating ? `${selectedDriver.rating}/5 ⭐` : 'N/A'}</Typography>
+                  <Box className="flex items-center">
+                    <Typography><strong>Estado:</strong></Typography>
+                    <Chip 
+                      label={getStatusText(selectedDriver.status)} 
+                      color={getStatusColor(selectedDriver.status)}
+                      size="small"
+                      className="ml-2"
+                    />
+                  </Box>
+                  <Box className="flex items-center">
+                    <Typography><strong>Documentos:</strong></Typography>
+                    <Chip 
+                      label={selectedDriver.documentsComplete ? 'Completos' : 'Incompletos'}
+                      color={selectedDriver.documentsComplete ? 'success' : 'error'}
+                      size="small"
+                      className="ml-2"
+                    />
                   </Box>
                 </Box>
-                <Box className="flex-1">
-                  <Typography variant="subtitle2" className="text-gray-600">
-                    Información del Vehículo
-                  </Typography>
-                  <Box className="mt-2 space-y-2">
-                    <Typography><strong>Tipo:</strong> {selectedDriver.vehicleType}</Typography>
-                    <Typography><strong>Calificación:</strong> {selectedDriver.rating}/5 ⭐</Typography>
-                    <Typography><strong>Estado:</strong> 
-                      <Chip 
-                        label={getStatusText(selectedDriver.status)} 
-                        color={getStatusColor(selectedDriver.status)}
-                        size="small"
-                        className="ml-2"
-                      />
-                    </Typography>
-                  </Box>
-                </Box>
-              </Stack>
+              </Box>
             </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Cerrar</Button>
-          {selectedDriver?.status === 'pending' && (
-            <>
-              <Button 
-                variant="outlined" 
-                color="error"
-                onClick={() => handleRejectDriver(selectedDriver.id)}
-              >
-                Rechazar
-              </Button>
-              <Button 
-                variant="contained" 
-                color="success"
-                onClick={() => handleApproveDriver(selectedDriver.id)}
-              >
-                Aprobar
-              </Button>
-            </>
-          )}
-        </DialogActions>
-      </Dialog>
+          </Box>
+        )}
+      </ReusableDialog>
+
+      {/* Confirmation Dialogs */}
+      <ConfirmationDialog
+        open={approveDialogOpen}
+        onClose={() => setApproveDialogOpen(false)}
+        onConfirm={handleConfirmApprove}
+        title="Confirmar Aprobación"
+        message={`¿Estás seguro de aprobar al conductor ${driverToAction?.name}?`}
+      />
+      <ConfirmationDialog
+        open={rejectDialogOpen}
+        onClose={() => setRejectDialogOpen(false)}
+        onConfirm={handleConfirmReject}
+        title="Confirmar Rechazo"
+        message={`¿Estás seguro de rechazar al conductor ${driverToAction?.name}?`}
+      />
     </Box>
   )
 } 

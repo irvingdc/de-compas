@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeToggle } from './ThemeToggle'
+import { ConfirmationDialog } from './common'
 import { 
   Home, 
   Map, 
@@ -14,7 +15,6 @@ import {
   LogOut 
 } from 'lucide-react'
 import { Tooltip } from '@mui/material'
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material'
 
 export const Layout: React.FC = () => {
   const { user, logout } = useAuth()
@@ -33,7 +33,6 @@ export const Layout: React.FC = () => {
   ]
 
   const handleLogout = async () => {
-    setLogoutDialogOpen(false)
     try {
       await logout()
     } catch (error) {
@@ -123,22 +122,15 @@ export const Layout: React.FC = () => {
       </div>
 
       {/* Dialogo de confirmación para cerrar sesión */}
-      <Dialog open={logoutDialogOpen} onClose={() => setLogoutDialogOpen(false)}>
-        <DialogTitle>¿Cerrar sesión?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            ¿Estás seguro de que deseas cerrar tu sesión?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setLogoutDialogOpen(false)} color="secondary">
-            Cancelar
-          </Button>
-          <Button onClick={handleLogout} color="primary" autoFocus>
-            Cerrar sesión
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmationDialog
+        open={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+        onConfirm={handleLogout}
+        title="¿Cerrar sesión?"
+        message="¿Estás seguro de que deseas cerrar tu sesión?"
+        confirmText="Cerrar sesión"
+        variant="info"
+      />
 
       {/* Main content */}
       <div className="ml-64">

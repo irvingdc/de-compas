@@ -181,10 +181,10 @@ export const Drivers: React.FC = () => {
     <Box className="space-y-6">
       {/* Header - Usando Tailwind para layout */}
       <Box>
-        <Typography variant="h4" component="h1" fontWeight="bold" className="text-gray-900">
+        <Typography variant="h4" component="h1" fontWeight="bold" className="text-brand-black">
           Gestión de Conductores
         </Typography>
-        <Typography variant="body1" className="text-gray-600">
+        <Typography variant="body1" className="text-secondary-600">
           Revisa y aprueba conductores
         </Typography>
       </Box>
@@ -197,7 +197,7 @@ export const Drivers: React.FC = () => {
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
-                className="bg-blue-600 hover:bg-blue-700"
+                color="primary"
               >
                 Nuevo Conductor
               </Button>

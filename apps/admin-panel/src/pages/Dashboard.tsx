@@ -59,8 +59,8 @@ export const Dashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Bienvenido al panel administrativo de De Compas</p>
+        <h1 className="text-2xl font-bold text-brand-black">Dashboard</h1>
+        <p className="text-secondary-600">Bienvenido al panel administrativo de De Compas</p>
       </div>
 
       {/* Stats */}
@@ -72,19 +72,19 @@ export const Dashboard: React.FC = () => {
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <Icon className="h-6 w-6 text-gray-400" />
+                    <Icon className="h-6 w-6 text-secondary-400" />
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-secondary-500 truncate">
                         {stat.name}
                       </dt>
                       <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-gray-900">
+                        <div className="text-2xl font-semibold text-brand-black">
                           {stat.value}
                         </div>
-                        <div className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                        <div className="ml-2 flex items-baseline text-sm font-semibold text-success-600">
+                          <TrendingUp className="h-4 w-4 text-success-500" />
                           {stat.change}
                         </div>
                       </dd>
@@ -131,18 +131,18 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">Acciones Rápidas</h3>
+        <div className="bg-white shadow rounded-lg border border-neutral-200">
+          <div className="px-6 py-4 border-b border-neutral-200">
+            <h3 className="text-lg font-medium text-brand-black">Acciones Rápidas</h3>
           </div>
           <div className="p-6 space-y-4">
-            <button className="w-full btn-primary">
+            <button className="w-full bg-primary-500 text-brand-black py-2 px-4 rounded-md hover:bg-primary-600 transition-colors font-medium">
               Crear Nueva Ruta
             </button>
-            <button className="w-full btn-secondary">
+            <button className="w-full bg-secondary-800 text-white py-2 px-4 rounded-md hover:bg-secondary-900 transition-colors font-medium">
               Revisar Conductores Pendientes
             </button>
-            <button className="w-full btn-outline">
+            <button className="w-full border border-neutral-300 text-secondary-800 py-2 px-4 rounded-md hover:bg-neutral-50 transition-colors font-medium">
               Generar Reporte Mensual
             </button>
           </div>

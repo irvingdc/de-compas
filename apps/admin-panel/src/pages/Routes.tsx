@@ -89,10 +89,10 @@ export const Routes: React.FC = () => {
       {/* Header */}
       <Box className="flex justify-between items-center">
         <Box>
-          <Typography variant="h4" component="h1" fontWeight="bold" className="text-gray-900">
+          <Typography variant="h4" component="h1" fontWeight="bold" className="text-brand-black">
             Gestión de Rutas
           </Typography>
-          <Typography variant="body1" className="text-gray-600">
+          <Typography variant="body1" className="text-secondary-600">
             Administra las rutas disponibles
           </Typography>
         </Box>
@@ -101,7 +101,7 @@ export const Routes: React.FC = () => {
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => console.log('TODO: Create route')}
-            className="bg-blue-600 hover:bg-blue-700"
+            color="primary"
           >
             Nueva Ruta
           </Button>

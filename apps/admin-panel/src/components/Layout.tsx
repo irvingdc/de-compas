@@ -35,13 +35,17 @@ export const Layout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
+      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg border-r border-neutral-200">
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 items-center justify-center border-b border-gray-200">
-            <h1 className="text-xl font-bold text-blue-600">De Compas</h1>
+          <div className="flex h-16 items-center justify-center border-b border-neutral-200 px-4">
+            <img 
+              src="/assets/LOGO_HORIZONTAL_BLACK.png" 
+              alt="De Compas" 
+              className="h-8 w-auto"
+            />
           </div>
 
           {/* Navigation */}
@@ -55,11 +59,11 @@ export const Layout: React.FC = () => {
                   to={item.href}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
                     isActive
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-primary-100 text-primary-700 border-l-4 border-primary-500'
+                      : 'text-secondary-700 hover:bg-neutral-100 hover:text-secondary-900'
                   }`}
                 >
-                  <Icon className="mr-3 h-5 w-5" />
+                  <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary-600' : 'text-secondary-600'}`} />
                   {item.name}
                 </Link>
               )
@@ -67,24 +71,24 @@ export const Layout: React.FC = () => {
           </nav>
 
           {/* User section */}
-          <div className="border-t border-gray-200 p-4">
+          <div className="border-t border-neutral-200 p-4">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">
+                <div className="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center">
+                  <span className="text-sm font-medium text-brand-black">
                     {user?.email?.charAt(0).toUpperCase()}
                   </span>
                 </div>
               </div>
               <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-brand-black">
                   {user?.email}
                 </p>
-                <p className="text-xs text-gray-500">Administrador</p>
+                <p className="text-xs text-secondary-600">Administrador</p>
               </div>
               <button
                 onClick={handleLogout}
-                className="ml-3 p-1 rounded-full text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+                className="ml-3 p-1 rounded-full text-secondary-400 hover:text-secondary-500 hover:bg-neutral-100 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
               </button>

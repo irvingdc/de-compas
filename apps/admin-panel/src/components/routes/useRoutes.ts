@@ -42,7 +42,6 @@ export interface UseRoutesActions {
   handleToggleStatus: (routeId: string, currentStatus: boolean) => Promise<void>
   handleDeleteRoute: (routeId: string) => Promise<void>
   handleDeleteMultiple: () => Promise<void>
-  handleCreateSampleData: () => Promise<void>
   
   // Selección
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -218,18 +217,7 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     }
   }
 
-  const handleCreateSampleData = async () => {
-    try {
-      setLoading(true)
-      await routeService.createSampleRoutes()
-      loadRoutes()
-      showSnackbar('Datos de prueba creados exitosamente', 'success')
-    } catch (err) {
-      showSnackbar('Error al crear datos de prueba', 'error')
-    } finally {
-      setLoading(false)
-    }
-  }
+
 
   const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' | 'warning') => {
     setSnackbar({ open: true, message, severity })
@@ -265,7 +253,6 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     handleToggleStatus,
     handleDeleteRoute,
     handleDeleteMultiple,
-    handleCreateSampleData,
     handleSelectAllClick,
     handleRowClick,
     handleChangePage,

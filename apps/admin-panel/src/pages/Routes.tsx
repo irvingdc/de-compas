@@ -42,7 +42,6 @@ export const Routes: React.FC = () => {
     handleToggleStatus,
     handleDeleteRoute,
     handleDeleteMultiple,
-    handleCreateSampleData,
     handleSelectAllClick,
     handleRowClick,
     handleChangePage,
@@ -106,15 +105,6 @@ export const Routes: React.FC = () => {
           >
             Nueva Ruta
           </Button>
-          {routes.length === 0 && !loading && (
-            <Button
-              variant="outlined"
-              onClick={handleCreateSampleData}
-              disabled={loading}
-            >
-              Crear Datos de Prueba
-            </Button>
-          )}
         </Stack>
       </Box>
 

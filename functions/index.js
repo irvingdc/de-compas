@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
+// Load environment variables
+require('dotenv').config();
+
 // Initialize the Admin SDK
 admin.initializeApp();
 
@@ -75,8 +78,13 @@ exports.getUserRole = functions.https.onCall(async (data, context) => {
 exports.initializeAdmin = functions.https.onCall(async (data, context) => {
   const { email, adminSecret } = data;
 
-  // Simple security check (in production, use environment variables)
-  if (adminSecret !== 'INIT_ADMIN_SECRET_2024') {
+  // Security check using environment variable
+  const expectedSecret = process.env.INIT_ADMIN_SECRET;
+  if (!expectedSecret) {
+    throw new functions.https.HttpsError('internal', 'Configuración de seguridad no encontrada.');
+  }
+  
+  if (adminSecret !== expectedSecret) {
     throw new functions.https.HttpsError('permission-denied', 'Secreto de administrador incorrecto.');
   }
 

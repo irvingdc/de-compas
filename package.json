@@ -21,7 +21,8 @@
     "functions:serve": "cd functions && npm run serve",
     "functions:deploy": "cd functions && npm run deploy",
     "functions:logs": "cd functions && npm run logs",
-    "init-admin": "node scripts/init-admin.js"
+    "init-admin": "node scripts/init-admin.js",
+    "generate-secret": "node scripts/generate-secret.js"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

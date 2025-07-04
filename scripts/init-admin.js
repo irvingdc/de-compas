@@ -34,7 +34,8 @@ async function initializeAdmin() {
 
   if (!email || !adminSecret) {
     console.error('❌ Uso: node init-admin.js <email> <admin-secret>');
-    console.error('   Ejemplo: node init-admin.js admin@decompas.com INIT_ADMIN_SECRET_2024');
+    console.error('   Ejemplo: node init-admin.js admin@decompas.com [SECURE_SECRET]');
+    console.error('   Nota: El secreto debe coincidir con INIT_ADMIN_SECRET en functions/.env');
     process.exit(1);
   }
 

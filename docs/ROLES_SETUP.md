@@ -41,7 +41,22 @@ const isAdmin = idTokenResult.claims.role === 'admin'
 
 ## Configuración Inicial
 
-### 1. Desplegar Firebase Functions
+### 1. Configurar Variables de Entorno
+```bash
+# Copiar el archivo de ejemplo
+cp functions/.env.example functions/.env
+
+# Editar el archivo .env con valores seguros
+nano functions/.env
+```
+
+**Generar secreto seguro:**
+```bash
+# Genera un secreto aleatorio seguro
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### 2. Desplegar Firebase Functions
 ```bash
 # Desplegar las funciones
 npm run functions:deploy
@@ -50,13 +65,15 @@ npm run functions:deploy
 npm run functions:serve
 ```
 
-### 2. Inicializar Primer Admin
+### 3. Inicializar Primer Admin
 ```bash
 # Formato: npm run init-admin <email> <secret>
-npm run init-admin admin@decompas.com INIT_ADMIN_SECRET_2024
+npm run init-admin admin@decompas.com 270d50276a518bbcb6e49dec9e7078dfd9c06b1788913dc8fc5d119fb7caf5c2
 ```
 
-### 3. Verificar el Cambio
+**Nota:** El secreto debe coincidir con `INIT_ADMIN_SECRET` en `functions/.env`
+
+### 4. Verificar el Cambio
 1. **Cierra sesión** del panel administrativo
 2. **Inicia sesión** nuevamente
 3. **Verifica la consola** del navegador:
@@ -121,11 +138,35 @@ console.log(result.data.users)
 - **⚡ Rápido**: No requiere consultas a la base de datos
 - **🎯 Escalable**: Fácil agregar nuevos roles
 - **🔄 Dinámico**: Sin necesidad de deployar código
+- **🔒 Variables de Entorno**: Secretos seguros fuera del código
+- **🎲 Secretos Aleatorios**: Secretos criptográficamente seguros
 
 ### ❌ Problemas del Sistema Anterior
 - **🚨 Hardcoded**: Email específico en el código
 - **🐛 Frágil**: Cambios requieren deployment
 - **⚠️ Inseguro**: Credenciales en el código fuente
+- **🔓 Secretos Predecibles**: Secretos fáciles de adivinar
+
+### 🔐 Mejoras de Seguridad Implementadas
+
+**Variables de Entorno:**
+```bash
+# functions/.env (NO se sube a Git)
+INIT_ADMIN_SECRET=270d50276a518bbcb6e49dec9e7078dfd9c06b1788913dc8fc5d119fb7caf5c2
+```
+
+**Secretos Aleatorios:**
+- ✅ 256 bits de entropía
+- ✅ Generados criptográficamente
+- ✅ Únicos por proyecto
+- ✅ Fáciles de rotar
+
+**Protección en Git:**
+```bash
+# .gitignore
+functions/.env     # ✅ Secretos no se suben
+functions/.env.example  # ✅ Template sin secretos
+```
 
 ## Troubleshooting
 
@@ -164,8 +205,11 @@ npm run functions:deploy        # Desplegar funciones
 npm run firebase:deploy         # Desplegar todo
 
 # Gestión
-npm run init-admin <email> <secret>  # Primer admin
-npm run functions:logs              # Ver logs
+npm run init-admin <email> <secure-secret>  # Primer admin
+npm run functions:logs                       # Ver logs
+
+# Seguridad
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"  # Generar secreto
 ```
 
 ## Próximos Pasos

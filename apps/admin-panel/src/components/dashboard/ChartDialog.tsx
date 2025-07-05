@@ -5,8 +5,7 @@ import {
   DialogContent, 
   IconButton, 
   Box, 
-  Typography,
-  Divider
+  Typography
 } from '@mui/material'
 import { X, TrendingUp } from 'lucide-react'
 import { 

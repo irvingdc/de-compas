@@ -60,13 +60,6 @@ export const DriverFilters: React.FC<DriverFiltersProps> = ({
           {/* Barra principal de acciones */}
           <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
             <Stack direction="row" spacing={2}>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                className="bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
-              >
-                Nuevo Conductor
-              </Button>
               <FormControl size="small" sx={{ minWidth: 120 }}>
                 <InputLabel>Filtrar por</InputLabel>
                 <Select

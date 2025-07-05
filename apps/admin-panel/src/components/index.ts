@@ -10,6 +10,9 @@ export * from './drivers'
 // Traveler components
 export * from './travelers'
 
+// Finance components
+export * from './finance'
+
 // Layout components
 export { Layout } from './Layout'
 export { ProtectedRoute } from './ProtectedRoute'

@@ -10,7 +10,7 @@ import {
 export const Finance: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0)
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue)
   }
 

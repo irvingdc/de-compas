@@ -15,8 +15,6 @@ import { TrendingUp, DollarSign, TrendingDown, BarChart3, Route, Users } from 'l
 import { 
   AreaChart, 
   Area, 
-  BarChart, 
-  Bar, 
   XAxis, 
   YAxis, 
   CartesianGrid, 

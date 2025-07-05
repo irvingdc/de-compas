@@ -17,28 +17,21 @@ import {
 import { 
   TrendingUp, 
   TrendingDown, 
-  Calendar, 
   MapPin, 
-  Users, 
   AlertTriangle,
-  Target,
   Brain,
   Activity,
-  Eye,
   Download,
   RefreshCw
 } from 'lucide-react'
 import { 
-  LineChart, 
   Line, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
   Tooltip as RechartsTooltip, 
   ResponsiveContainer,
-  AreaChart,
   Area,
-  BarChart,
   Bar,
   ComposedChart,
   Legend,

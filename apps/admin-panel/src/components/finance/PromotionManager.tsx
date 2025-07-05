@@ -11,8 +11,6 @@ import {
   FormControl, 
   InputLabel, 
   Chip, 
-  Switch, 
-  FormControlLabel,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -27,15 +25,11 @@ import {
   Edit, 
   Trash2, 
   Eye, 
-  TrendingUp, 
   Users, 
-  Calendar, 
   DollarSign,
   Target,
   Gift,
-  Copy,
-  Send,
-  BarChart3
+  Copy
 } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 

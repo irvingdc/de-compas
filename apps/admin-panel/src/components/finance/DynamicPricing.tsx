@@ -7,7 +7,6 @@ import {
   Switch, 
   FormControlLabel,
   Slider,
-  TextField,
   Button,
   Chip,
   Alert,
@@ -15,7 +14,6 @@ import {
 } from '@mui/material'
 import { 
   TrendingUp, 
-  Settings, 
   Zap, 
   Calendar, 
   Users, 
@@ -82,14 +80,13 @@ export const DynamicPricing: React.FC = () => {
   const [maxIncrease, setMaxIncrease] = useState(50)
   const [maxDecrease, setMaxDecrease] = useState(25)
   const [demandThreshold, setDemandThreshold] = useState(70)
-  const [selectedRoute, setSelectedRoute] = useState('CDMX - Guadalajara')
+  const [selectedRoute] = useState('CDMX - Guadalajara')
 
   const handleSaveSettings = () => {
     // Aquí iría la lógica para guardar configuraciones
     console.log('Configuraciones guardadas')
   }
 
-  const totalRevenue = routeConfigs.reduce((sum, route) => sum + route.currentPrice, 0)
   const potentialIncrease = routeConfigs.reduce((sum, route) => sum + (route.currentPrice - route.basePrice), 0)
   const averageDemand = routeConfigs.reduce((sum, route) => sum + route.demand, 0) / routeConfigs.length
 

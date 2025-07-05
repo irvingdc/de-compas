@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material'
 import {
-  Add as AddIcon,
   FilterList as FilterListIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material'

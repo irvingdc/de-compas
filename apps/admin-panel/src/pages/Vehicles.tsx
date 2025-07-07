@@ -14,6 +14,7 @@ import {
   VehicleFilters,
   VehicleTable,
   VehicleDialog,
+  CreateVehicleDialog,
   DeleteConfirmationDialog,
   StatusConfirmationDialog,
   useVehicles,
@@ -33,6 +34,7 @@ export const Vehicles: React.FC = () => {
     filters,
     searchTerm,
     showFilters,
+    createDialogOpen,
     deleteDialogOpen,
     viewDialogOpen,
     statusDialogOpen,
@@ -47,6 +49,7 @@ export const Vehicles: React.FC = () => {
     handleDeleteMultiple,
     handleActivateMultiple,
     handleDeactivateMultiple,
+    handleCreateVehicle,
     handleSelectAllClick,
     handleRowClick,
     handleChangePage,
@@ -54,6 +57,7 @@ export const Vehicles: React.FC = () => {
     setFilters,
     setSearchTerm,
     setShowFilters,
+    setCreateDialogOpen,
     setDeleteDialogOpen,
     setViewDialogOpen,
     setStatusDialogOpen,
@@ -125,7 +129,7 @@ export const Vehicles: React.FC = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => console.log('TODO: Create vehicle')}
+            onClick={() => setCreateDialogOpen(true)}
             color="primary"
           >
             Nuevo Vehículo
@@ -197,6 +201,13 @@ export const Vehicles: React.FC = () => {
         open={viewDialogOpen}
         vehicle={selectedVehicle}
         onClose={() => setViewDialogOpen(false)}
+      />
+
+      {/* Diálogo de Creación de Vehículo */}
+      <CreateVehicleDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onSubmit={handleCreateVehicle}
       />
 
       {/* Snackbar para notificaciones */}

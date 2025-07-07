@@ -15,7 +15,6 @@ export interface Vehicle {
     seats: number
     imageUrl: string
     kmRange: number
-    kmPerCharge: number
     chargeTime: number
     active: boolean
     createdAt: Timestamp
@@ -30,24 +29,24 @@ export interface CreateVehicleData {
     seats: number
     imageUrl: string
     kmRange: number
-    kmPerCharge: number
     chargeTime: number
     active?: boolean
 }
 
 export interface UpdateVehicleData {
+    id: string
     brand?: string
     model?: string
     year?: number
     seats?: number
     imageUrl?: string
     kmRange?: number
-    kmPerCharge?: number
     chargeTime?: number
     active?: boolean
 }
 
 export interface VehicleFilters {
+    id?: string
     brand?: string
     model?: string
     minYear?: number

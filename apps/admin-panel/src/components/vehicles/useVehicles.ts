@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Vehicle, VehicleFilters } from '../../types/vehicle'
+import { Vehicle, VehicleFilters, CreateVehicleData } from '../../types/vehicle'
 import { vehicleService } from '../../services/vehicleService'
 
 export interface UseVehiclesState {
@@ -46,6 +46,7 @@ export interface UseVehiclesActions {
   handleDeleteMultiple: () => Promise<void>
   handleActivateMultiple: () => Promise<void>
   handleDeactivateMultiple: () => Promise<void>
+  handleCreateVehicle: (vehicleData: CreateVehicleData) => Promise<void>
   
   // Selección
   handleSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -249,6 +250,19 @@ export const useVehicles = (): UseVehiclesState & UseVehiclesActions => {
     }
   }
 
+  const handleCreateVehicle = async (vehicleData: CreateVehicleData) => {
+    try {
+      await vehicleService.createVehicle(vehicleData)
+      loadVehicles()
+      showSnackbar('Vehículo creado exitosamente', 'success')
+      setCreateDialogOpen(false)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Error al crear vehículo'
+      showSnackbar(errorMessage, 'error')
+      throw err // Re-throw para que el diálogo pueda manejar el error
+    }
+  }
+
   const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' | 'warning') => {
     setSnackbar({ open: true, message, severity })
   }
@@ -287,6 +301,7 @@ export const useVehicles = (): UseVehiclesState & UseVehiclesActions => {
     handleDeleteMultiple,
     handleActivateMultiple,
     handleDeactivateMultiple,
+    handleCreateVehicle,
     handleSelectAllClick,
     handleRowClick,
     handleChangePage,

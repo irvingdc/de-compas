@@ -126,17 +126,7 @@ export const VehicleDialog: React.FC<VehicleDialogProps> = ({
                 </Box>
               </Stack>
               
-              <Stack direction="row" spacing={1} alignItems="center">
-                <BatteryIcon color="action" />
-                <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Km por carga
-                  </Typography>
-                  <Typography variant="body1" fontWeight="medium">
-                    {vehicle.kmPerCharge} km
-                  </Typography>
-                </Box>
-              </Stack>
+
               
               <Stack direction="row" spacing={1} alignItems="center">
                 <TimeIcon color="action" />

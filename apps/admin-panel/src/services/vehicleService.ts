@@ -435,9 +435,7 @@ class VehicleService {
       throw new Error('El rango de kilómetros debe ser mayor a 0')
     }
 
-    if (data.kmPerCharge <= 0) {
-      throw new Error('Los kilómetros por carga deben ser mayor a 0')
-    }
+
 
     if (data.chargeTime <= 0) {
       throw new Error('El tiempo de carga debe ser mayor a 0')

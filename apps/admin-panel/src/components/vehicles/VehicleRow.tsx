@@ -119,14 +119,9 @@ export const VehicleRow: React.FC<VehicleRowProps> = ({
       <TableCell>
         <Stack direction="row" spacing={1} alignItems="center">
           <BatteryIcon fontSize="small" color="action" />
-          <Box>
-            <Typography variant="body2">
-              {vehicle.kmRange} km
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {vehicle.kmPerCharge} km/carga
-            </Typography>
-          </Box>
+          <Typography variant="body2">
+            {vehicle.kmRange} km
+          </Typography>
         </Stack>
       </TableCell>
       

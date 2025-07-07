@@ -275,6 +275,50 @@ class RouteService {
   }
 
   /**
+   * Activar múltiples rutas
+   */
+  async activateMultipleRoutes(ids: string[]): Promise<void> {
+    try {
+      const batch = writeBatch(db)
+      
+      ids.forEach(id => {
+        const docRef = doc(db, COLLECTION_NAME, id)
+        batch.update(docRef, {
+          active: true,
+          updatedAt: Timestamp.now()
+        })
+      })
+
+      await batch.commit()
+    } catch (error) {
+      console.error('Error activando rutas:', error)
+      throw new Error(`Error al activar rutas: ${error instanceof Error ? error.message : 'Error desconocido'}`)
+    }
+  }
+
+  /**
+   * Desactivar múltiples rutas
+   */
+  async deactivateMultipleRoutes(ids: string[]): Promise<void> {
+    try {
+      const batch = writeBatch(db)
+      
+      ids.forEach(id => {
+        const docRef = doc(db, COLLECTION_NAME, id)
+        batch.update(docRef, {
+          active: false,
+          updatedAt: Timestamp.now()
+        })
+      })
+
+      await batch.commit()
+    } catch (error) {
+      console.error('Error desactivando rutas:', error)
+      throw new Error(`Error al desactivar rutas: ${error instanceof Error ? error.message : 'Error desconocido'}`)
+    }
+  }
+
+  /**
    * Buscar rutas por texto
    */
   async searchRoutes(searchTerm: string, pageSize: number = 20): Promise<RouteSearchResult> {

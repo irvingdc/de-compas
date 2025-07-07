@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Route, RouteFilters } from '../../types/route'
-import { routeService } from '../../services/routeService'
+import { Vehicle, VehicleFilters } from '../../types/vehicle'
+import { vehicleService } from '../../services/vehicleService'
 
-export interface UseRoutesState {
+export interface UseVehiclesState {
   // Estados principales
-  routes: Route[]
+  vehicles: Vehicle[]
   loading: boolean
   error: string | null
   selected: string[]
@@ -12,11 +12,11 @@ export interface UseRoutesState {
   // Paginación
   page: number
   rowsPerPage: number
-  totalRoutes: number
+  totalVehicles: number
   hasMore: boolean
   
   // Filtros
-  filters: RouteFilters
+  filters: VehicleFilters
   searchTerm: string
   showFilters: boolean
   
@@ -26,7 +26,7 @@ export interface UseRoutesState {
   deleteDialogOpen: boolean
   viewDialogOpen: boolean
   statusDialogOpen: boolean
-  selectedRoute: Route | null
+  selectedVehicle: Vehicle | null
   statusAction: 'activate' | 'deactivate'
   
   // Notificaciones
@@ -37,12 +37,12 @@ export interface UseRoutesState {
   }
 }
 
-export interface UseRoutesActions {
+export interface UseVehiclesActions {
   // Operaciones de datos
-  loadRoutes: () => Promise<void>
+  loadVehicles: () => Promise<void>
   handleSearch: () => Promise<void>
-  handleToggleStatus: (routeId: string, currentStatus: boolean) => Promise<void>
-  handleDeleteRoute: (routeId: string) => Promise<void>
+  handleToggleStatus: (vehicleId: string, currentStatus: boolean) => Promise<void>
+  handleDeleteVehicle: (vehicleId: string) => Promise<void>
   handleDeleteMultiple: () => Promise<void>
   handleActivateMultiple: () => Promise<void>
   handleDeactivateMultiple: () => Promise<void>
@@ -56,7 +56,7 @@ export interface UseRoutesActions {
   handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
   
   // Filtros
-  setFilters: (filters: RouteFilters) => void
+  setFilters: (filters: VehicleFilters) => void
   setSearchTerm: (term: string) => void
   setShowFilters: (show: boolean) => void
   
@@ -66,7 +66,7 @@ export interface UseRoutesActions {
   setDeleteDialogOpen: (open: boolean) => void
   setViewDialogOpen: (open: boolean) => void
   setStatusDialogOpen: (open: boolean) => void
-  setSelectedRoute: (route: Route | null) => void
+  setSelectedVehicle: (vehicle: Vehicle | null) => void
   setStatusAction: (action: 'activate' | 'deactivate') => void
   
   // Notificaciones
@@ -75,9 +75,9 @@ export interface UseRoutesActions {
   setError: (error: string | null) => void
 }
 
-export const useRoutes = (): UseRoutesState & UseRoutesActions => {
+export const useVehicles = (): UseVehiclesState & UseVehiclesActions => {
   // Estados principales
-  const [routes, setRoutes] = useState<Route[]>([])
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selected, setSelected] = useState<string[]>([])
@@ -85,11 +85,11 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
   // Paginación
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [totalRoutes, setTotalRoutes] = useState(0)
+  const [totalVehicles, setTotalVehicles] = useState(0)
   const [hasMore, setHasMore] = useState(false)
   
   // Filtros
-  const [filters, setFilters] = useState<RouteFilters>({})
+  const [filters, setFilters] = useState<VehicleFilters>({})
   const [searchTerm, setSearchTerm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   
@@ -99,7 +99,7 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [statusDialogOpen, setStatusDialogOpen] = useState(false)
-  const [selectedRoute, setSelectedRoute] = useState<Route | null>(null)
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
   const [statusAction, setStatusAction] = useState<'activate' | 'deactivate'>('activate')
   
   // Notificaciones
@@ -109,24 +109,24 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     severity: 'success' as 'success' | 'error' | 'info' | 'warning'
   })
 
-  // Cargar rutas
+  // Cargar vehículos
   useEffect(() => {
-    loadRoutes()
+    loadVehicles()
   }, [page, rowsPerPage, filters])
 
-  const loadRoutes = async () => {
+  const loadVehicles = async () => {
     try {
       setLoading(true)
       setError(null)
       
-      const result = await routeService.getRoutes(filters, rowsPerPage)
+      const result = await vehicleService.getVehicles(filters, rowsPerPage)
       
-      setRoutes(result.routes)
-      setTotalRoutes(result.total)
+      setVehicles(result.vehicles)
+      setTotalVehicles(result.total)
       setHasMore(result.hasMore)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar rutas')
-      showSnackbar('Error al cargar rutas', 'error')
+      setError(err instanceof Error ? err.message : 'Error al cargar vehículos')
+      showSnackbar('Error al cargar vehículos', 'error')
     } finally {
       setLoading(false)
     }
@@ -134,18 +134,18 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
-      loadRoutes()
+      loadVehicles()
       return
     }
 
     try {
       setLoading(true)
-      const result = await routeService.searchRoutes(searchTerm, rowsPerPage)
-      setRoutes(result.routes)
-      setTotalRoutes(result.total)
+      const result = await vehicleService.searchVehicles(searchTerm, rowsPerPage)
+      setVehicles(result.vehicles)
+      setTotalVehicles(result.total)
       setHasMore(result.hasMore)
     } catch (err) {
-      showSnackbar('Error al buscar rutas', 'error')
+      showSnackbar('Error al buscar vehículos', 'error')
     } finally {
       setLoading(false)
     }
@@ -153,7 +153,7 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = routes.map((route) => route.id)
+      const newSelected = vehicles.map((vehicle) => vehicle.id)
       setSelected(newSelected)
       return
     }
@@ -189,63 +189,63 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     setPage(0)
   }
 
-  const handleToggleStatus = async (routeId: string, currentStatus: boolean) => {
+  const handleToggleStatus = async (vehicleId: string, currentStatus: boolean) => {
     try {
-      await routeService.toggleRouteStatus(routeId, !currentStatus)
-      loadRoutes()
+      await vehicleService.toggleVehicleStatus(vehicleId, !currentStatus)
+      loadVehicles()
       showSnackbar(
-        `Ruta ${!currentStatus ? 'activada' : 'desactivada'} exitosamente`,
+        `Vehículo ${!currentStatus ? 'activado' : 'desactivado'} exitosamente`,
         'success'
       )
     } catch (err) {
-      showSnackbar('Error al cambiar estado de la ruta', 'error')
+      showSnackbar('Error al cambiar estado del vehículo', 'error')
     }
   }
 
-  const handleDeleteRoute = async (routeId: string) => {
+  const handleDeleteVehicle = async (vehicleId: string) => {
     try {
-      await routeService.deleteRoute(routeId)
-      loadRoutes()
-      showSnackbar('Ruta eliminada exitosamente', 'success')
+      await vehicleService.deleteVehicle(vehicleId)
+      loadVehicles()
+      showSnackbar('Vehículo eliminado exitosamente', 'success')
       setDeleteDialogOpen(false)
     } catch (err) {
-      showSnackbar('Error al eliminar ruta', 'error')
+      showSnackbar('Error al eliminar vehículo', 'error')
     }
   }
 
   const handleDeleteMultiple = async () => {
     try {
-      await routeService.deleteMultipleRoutes(selected)
-      loadRoutes()
+      await vehicleService.deleteMultipleVehicles(selected)
+      loadVehicles()
       setSelected([])
-      showSnackbar(`${selected.length} rutas eliminadas exitosamente`, 'success')
+      showSnackbar(`${selected.length} vehículos eliminados exitosamente`, 'success')
       setDeleteDialogOpen(false)
     } catch (err) {
-      showSnackbar('Error al eliminar rutas', 'error')
+      showSnackbar('Error al eliminar vehículos', 'error')
     }
   }
 
   const handleActivateMultiple = async () => {
     try {
-      await routeService.activateMultipleRoutes(selected)
-      loadRoutes()
+      await vehicleService.activateMultipleVehicles(selected)
+      loadVehicles()
       setSelected([])
-      showSnackbar(`${selected.length} rutas activadas exitosamente`, 'success')
+      showSnackbar(`${selected.length} vehículos activados exitosamente`, 'success')
       setStatusDialogOpen(false)
     } catch (err) {
-      showSnackbar('Error al activar rutas', 'error')
+      showSnackbar('Error al activar vehículos', 'error')
     }
   }
 
   const handleDeactivateMultiple = async () => {
     try {
-      await routeService.deactivateMultipleRoutes(selected)
-      loadRoutes()
+      await vehicleService.deactivateMultipleVehicles(selected)
+      loadVehicles()
       setSelected([])
-      showSnackbar(`${selected.length} rutas desactivadas exitosamente`, 'success')
+      showSnackbar(`${selected.length} vehículos desactivados exitosamente`, 'success')
       setStatusDialogOpen(false)
     } catch (err) {
-      showSnackbar('Error al desactivar rutas', 'error')
+      showSnackbar('Error al desactivar vehículos', 'error')
     }
   }
 
@@ -259,13 +259,13 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
 
   return {
     // Estados
-    routes,
+    vehicles,
     loading,
     error,
     selected,
     page,
     rowsPerPage,
-    totalRoutes,
+    totalVehicles,
     hasMore,
     filters,
     searchTerm,
@@ -275,15 +275,15 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     deleteDialogOpen,
     viewDialogOpen,
     statusDialogOpen,
-    selectedRoute,
+    selectedVehicle,
     statusAction,
     snackbar,
     
     // Acciones
-    loadRoutes,
+    loadVehicles,
     handleSearch,
     handleToggleStatus,
-    handleDeleteRoute,
+    handleDeleteVehicle,
     handleDeleteMultiple,
     handleActivateMultiple,
     handleDeactivateMultiple,
@@ -299,7 +299,7 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     setDeleteDialogOpen,
     setViewDialogOpen,
     setStatusDialogOpen,
-    setSelectedRoute,
+    setSelectedVehicle,
     setStatusAction,
     showSnackbar,
     closeSnackbar,

@@ -19,14 +19,14 @@ import {
   CheckCircle as ActivateIcon,
   Cancel as DeactivateIcon,
 } from '@mui/icons-material'
-import { RouteFilters as RouteFiltersType } from '../../types/route'
+import { VehicleFilters as VehicleFiltersType } from '../../types/vehicle'
 
-interface RouteFiltersProps {
-  filters: RouteFiltersType
+interface VehicleFiltersProps {
+  filters: VehicleFiltersType
   searchTerm: string
   showFilters: boolean
   selectedCount: number
-  onFiltersChange: (filters: RouteFiltersType) => void
+  onFiltersChange: (filters: VehicleFiltersType) => void
   onSearchTermChange: (term: string) => void
   onSearch: () => void
   onToggleFilters: () => void
@@ -35,7 +35,7 @@ interface RouteFiltersProps {
   onDeactivateSelected: () => void
 }
 
-export const RouteFilters: React.FC<RouteFiltersProps> = ({
+export const VehicleFilters: React.FC<VehicleFiltersProps> = ({
   filters,
   searchTerm,
   showFilters,
@@ -48,9 +48,11 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
   onActivateSelected,
   onDeactivateSelected,
 }) => {
-  const handleFilterChange = (key: keyof RouteFiltersType, value: any) => {
+  const handleFilterChange = (key: keyof VehicleFiltersType, value: any) => {
     onFiltersChange({ ...filters, [key]: value })
   }
+
+  const currentYear = new Date().getFullYear()
 
   return (
     <Card>
@@ -59,7 +61,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
           {/* Barra de búsqueda principal */}
           <Stack direction="row" spacing={2} alignItems="center">
             <TextField
-              placeholder="Buscar por nombre, origen o destino..."
+              placeholder="Buscar por marca, modelo o año..."
               value={searchTerm}
               onChange={(e) => onSearchTermChange(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && onSearch()}
@@ -90,17 +92,17 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
           {showFilters && (
             <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <TextField
-                label="Origen"
+                label="Marca"
                 size="small"
-                value={filters.origin || ''}
-                onChange={(e) => handleFilterChange('origin', e.target.value)}
+                value={filters.brand || ''}
+                onChange={(e) => handleFilterChange('brand', e.target.value)}
                 fullWidth
               />
               <TextField
-                label="Destino"
+                label="Modelo"
                 size="small"
-                value={filters.destination || ''}
-                onChange={(e) => handleFilterChange('destination', e.target.value)}
+                value={filters.model || ''}
+                onChange={(e) => handleFilterChange('model', e.target.value)}
                 fullWidth
               />
               <FormControl size="small" fullWidth>
@@ -114,24 +116,44 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
                   }}
                 >
                   <MenuItem value="">Todos</MenuItem>
-                  <MenuItem value="true">Activas</MenuItem>
-                  <MenuItem value="false">Inactivas</MenuItem>
+                  <MenuItem value="true">Activos</MenuItem>
+                  <MenuItem value="false">Inactivos</MenuItem>
                 </Select>
               </FormControl>
               <Stack direction="row" spacing={1}>
                 <TextField
-                  label="Precio mín"
+                  label="Año mín"
                   type="number"
                   size="small"
-                  value={filters.minPrice || ''}
-                  onChange={(e) => handleFilterChange('minPrice', Number(e.target.value) || undefined)}
+                  value={filters.minYear || ''}
+                  onChange={(e) => handleFilterChange('minYear', Number(e.target.value) || undefined)}
+                  inputProps={{ min: 1900, max: currentYear }}
                 />
                 <TextField
-                  label="Precio máx"
+                  label="Año máx"
                   type="number"
                   size="small"
-                  value={filters.maxPrice || ''}
-                  onChange={(e) => handleFilterChange('maxPrice', Number(e.target.value) || undefined)}
+                  value={filters.maxYear || ''}
+                  onChange={(e) => handleFilterChange('maxYear', Number(e.target.value) || undefined)}
+                  inputProps={{ min: 1900, max: currentYear }}
+                />
+              </Stack>
+              <Stack direction="row" spacing={1}>
+                <TextField
+                  label="Asientos mín"
+                  type="number"
+                  size="small"
+                  value={filters.minSeats || ''}
+                  onChange={(e) => handleFilterChange('minSeats', Number(e.target.value) || undefined)}
+                  inputProps={{ min: 1, max: 50 }}
+                />
+                <TextField
+                  label="Asientos máx"
+                  type="number"
+                  size="small"
+                  value={filters.maxSeats || ''}
+                  onChange={(e) => handleFilterChange('maxSeats', Number(e.target.value) || undefined)}
+                  inputProps={{ min: 1, max: 50 }}
                 />
               </Stack>
             </Box>
@@ -148,7 +170,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
               }}
             >
               <Typography variant="body2" color="text.secondary" sx={{ color: 'inherit' }}>
-                {selectedCount} rutas seleccionadas
+                {selectedCount} vehículos seleccionados
               </Typography>
               <Button
                 size="small"
@@ -156,7 +178,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
                 onClick={onActivateSelected}
                 startIcon={<ActivateIcon />}
               >
-                Activar seleccionadas
+                Activar seleccionados
               </Button>
               <Button
                 size="small"
@@ -164,7 +186,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
                 onClick={onDeactivateSelected}
                 startIcon={<DeactivateIcon />}
               >
-                Desactivar seleccionadas
+                Desactivar seleccionados
               </Button>
               <Button
                 size="small"
@@ -172,7 +194,7 @@ export const RouteFilters: React.FC<RouteFiltersProps> = ({
                 onClick={onDeleteSelected}
                 startIcon={<DeleteIcon />}
               >
-                Eliminar seleccionadas
+                Eliminar seleccionados
               </Button>
             </Box>
           )}

@@ -10,6 +10,7 @@ import {
   Users, 
   UserCheck, 
   Car, 
+  Truck,
   DollarSign, 
   Settings, 
   LogOut 
@@ -25,6 +26,7 @@ export const Layout: React.FC = () => {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
     { name: 'Rutas', href: '/routes', icon: Map },
+    { name: 'Vehículos', href: '/vehicles', icon: Truck },
     { name: 'Conductores', href: '/drivers', icon: UserCheck },
     { name: 'Viajeros', href: '/travelers', icon: Users },
     { name: 'Viajes', href: '/trips', icon: Car },

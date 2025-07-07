@@ -11,39 +11,39 @@ import {
   Add as AddIcon,
 } from '@mui/icons-material'
 import {
-  RouteFilters,
-  RouteTable,
-  RouteDialog,
+  VehicleFilters,
+  VehicleTable,
+  VehicleDialog,
   DeleteConfirmationDialog,
   StatusConfirmationDialog,
-  useRoutes,
-} from '../components/routes'
-import { Route } from '../types/route'
+  useVehicles,
+} from '../components/vehicles'
+import { Vehicle } from '../types/vehicle'
 
-export const Routes: React.FC = () => {
+export const Vehicles: React.FC = () => {
   const {
     // Estados
-    routes,
+    vehicles,
     loading,
     error,
     selected,
     page,
     rowsPerPage,
-    totalRoutes,
+    totalVehicles,
     filters,
     searchTerm,
     showFilters,
     deleteDialogOpen,
     viewDialogOpen,
     statusDialogOpen,
-    selectedRoute,
+    selectedVehicle,
     statusAction,
     snackbar,
     
     // Acciones
     handleSearch,
     handleToggleStatus,
-    handleDeleteRoute,
+    handleDeleteVehicle,
     handleDeleteMultiple,
     handleActivateMultiple,
     handleDeactivateMultiple,
@@ -57,25 +57,25 @@ export const Routes: React.FC = () => {
     setDeleteDialogOpen,
     setViewDialogOpen,
     setStatusDialogOpen,
-    setSelectedRoute,
+    setSelectedVehicle,
     setStatusAction,
     closeSnackbar,
     setError,
-  } = useRoutes()
+  } = useVehicles()
 
-  const handleView = (route: Route) => {
-    setSelectedRoute(route)
+  const handleView = (vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle)
     setViewDialogOpen(true)
   }
 
-  const handleEdit = (route: Route) => {
-    setSelectedRoute(route)
+  const handleEdit = (vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle)
     // TODO: Implementar edición
-    console.log('Edit route:', route)
+    console.log('Edit vehicle:', vehicle)
   }
 
-  const handleDelete = (route: Route) => {
-    setSelectedRoute(route)
+  const handleDelete = (vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle)
     setDeleteDialogOpen(true)
   }
 
@@ -96,8 +96,8 @@ export const Routes: React.FC = () => {
   const handleDeleteConfirm = () => {
     if (selected.length > 0) {
       handleDeleteMultiple()
-    } else if (selectedRoute) {
-      handleDeleteRoute(selectedRoute.id)
+    } else if (selectedVehicle) {
+      handleDeleteVehicle(selectedVehicle.id)
     }
   }
 
@@ -115,26 +115,26 @@ export const Routes: React.FC = () => {
       <Box className="flex justify-between items-center">
         <Box>
           <Typography variant="h4" component="h1" fontWeight="bold" className="text-brand-black">
-            Gestión de Rutas
+            Gestión de Vehículos
           </Typography>
           <Typography variant="body1" className="text-secondary-600">
-            Administra las rutas disponibles
+            Administra los tipos de vehículos disponibles para conductores
           </Typography>
         </Box>
         <Stack direction="row" spacing={2}>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => console.log('TODO: Create route')}
+            onClick={() => console.log('TODO: Create vehicle')}
             color="primary"
           >
-            Nueva Ruta
+            Nuevo Vehículo
           </Button>
         </Stack>
       </Box>
 
       {/* Filtros y Búsqueda */}
-      <RouteFilters
+      <VehicleFilters
         filters={filters}
         searchTerm={searchTerm}
         showFilters={showFilters}
@@ -155,14 +155,14 @@ export const Routes: React.FC = () => {
         </Alert>
       )}
 
-      {/* Tabla de Rutas */}
-      <RouteTable
-        routes={routes}
+      {/* Tabla de Vehículos */}
+      <VehicleTable
+        vehicles={vehicles}
         loading={loading}
         selected={selected}
         page={page}
         rowsPerPage={rowsPerPage}
-        totalRoutes={totalRoutes}
+        totalVehicles={totalVehicles}
         onSelectAll={handleSelectAllClick}
         onRowClick={handleRowClick}
         onView={handleView}
@@ -176,7 +176,7 @@ export const Routes: React.FC = () => {
       {/* Diálogo de Confirmación de Eliminación */}
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
-        route={selectedRoute}
+        vehicle={selectedVehicle}
         selectedCount={selected.length}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={handleDeleteConfirm}
@@ -185,17 +185,17 @@ export const Routes: React.FC = () => {
       {/* Diálogo de Confirmación de Estado */}
       <StatusConfirmationDialog
         open={statusDialogOpen}
-        route={selectedRoute}
+        vehicle={selectedVehicle}
         selectedCount={selected.length}
         action={statusAction}
         onClose={() => setStatusDialogOpen(false)}
         onConfirm={handleStatusConfirm}
       />
 
-      {/* Diálogo de Detalles de Ruta */}
-      <RouteDialog
+      {/* Diálogo de Detalles de Vehículo */}
+      <VehicleDialog
         open={viewDialogOpen}
-        route={selectedRoute}
+        vehicle={selectedVehicle}
         onClose={() => setViewDialogOpen(false)}
       />
 

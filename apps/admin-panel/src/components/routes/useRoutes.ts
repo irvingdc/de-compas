@@ -41,6 +41,7 @@ export interface UseRoutesActions {
   // Operaciones de datos
   loadRoutes: () => Promise<void>
   handleSearch: () => Promise<void>
+  handleCreateRoute: (data: import('../../types/route').CreateRouteData) => Promise<void>
   handleToggleStatus: (routeId: string, currentStatus: boolean) => Promise<void>
   handleDeleteRoute: (routeId: string) => Promise<void>
   handleDeleteMultiple: () => Promise<void>
@@ -148,6 +149,17 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
       showSnackbar('Error al buscar rutas', 'error')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleCreateRoute = async (data: import('../../types/route').CreateRouteData) => {
+    try {
+      await routeService.createRoute(data)
+      loadRoutes()
+      showSnackbar('Ruta creada exitosamente', 'success')
+      setCreateDialogOpen(false)
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Error al crear ruta')
     }
   }
 
@@ -282,6 +294,7 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     // Acciones
     loadRoutes,
     handleSearch,
+    handleCreateRoute,
     handleToggleStatus,
     handleDeleteRoute,
     handleDeleteMultiple,

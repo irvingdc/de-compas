@@ -14,6 +14,7 @@ import {
   RouteFilters,
   RouteTable,
   RouteDialog,
+  CreateRouteDialog,
   DeleteConfirmationDialog,
   StatusConfirmationDialog,
   useRoutes,
@@ -33,6 +34,7 @@ export const Routes: React.FC = () => {
     filters,
     searchTerm,
     showFilters,
+    createDialogOpen,
     deleteDialogOpen,
     viewDialogOpen,
     statusDialogOpen,
@@ -42,6 +44,7 @@ export const Routes: React.FC = () => {
     
     // Acciones
     handleSearch,
+    handleCreateRoute,
     handleToggleStatus,
     handleDeleteRoute,
     handleDeleteMultiple,
@@ -54,6 +57,7 @@ export const Routes: React.FC = () => {
     setFilters,
     setSearchTerm,
     setShowFilters,
+    setCreateDialogOpen,
     setDeleteDialogOpen,
     setViewDialogOpen,
     setStatusDialogOpen,
@@ -125,7 +129,7 @@ export const Routes: React.FC = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => console.log('TODO: Create route')}
+            onClick={() => setCreateDialogOpen(true)}
             color="primary"
           >
             Nueva Ruta
@@ -190,6 +194,13 @@ export const Routes: React.FC = () => {
         action={statusAction}
         onClose={() => setStatusDialogOpen(false)}
         onConfirm={handleStatusConfirm}
+      />
+
+      {/* Diálogo de Crear Ruta */}
+      <CreateRouteDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onSubmit={handleCreateRoute}
       />
 
       {/* Diálogo de Detalles de Ruta */}

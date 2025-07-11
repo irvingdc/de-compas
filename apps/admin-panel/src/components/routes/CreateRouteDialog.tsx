@@ -62,7 +62,6 @@ const initialFormData: CreateRouteData = {
   distance: 1,
   active: true,
   description: '',
-  vehicleType: '',
 }
 
 export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
@@ -342,9 +341,7 @@ const MainInformationStep: React.FC<MainInformationStepProps> = React.memo(({
             required
             placeholder="Ej: 6 horas"
           />
-        </Box>
 
-        <Box display="flex" gap={2}>
           <TextField
             fullWidth
             label="Distancia (km)"
@@ -355,14 +352,6 @@ const MainInformationStep: React.FC<MainInformationStepProps> = React.memo(({
             InputProps={{
               endAdornment: <Typography>km</Typography>,
             }}
-          />
-
-          <TextField
-            fullWidth
-            label="Tipo de Vehículo"
-            value={formData.vehicleType}
-            onChange={(e) => updateFormData({ vehicleType: e.target.value })}
-            placeholder="Ej: Autobús, Van, etc."
           />
         </Box>
 
@@ -408,9 +397,6 @@ const ReviewStep: React.FC<ReviewStepProps> = React.memo(({ formData }) => {
                 <Typography><strong>Precio:</strong> ${formData.price} MXN</Typography>
                 <Typography><strong>Duración:</strong> {formData.duration}</Typography>
                 <Typography><strong>Distancia:</strong> {formData.distance} km</Typography>
-                {formData.vehicleType && (
-                  <Typography><strong>Tipo de Vehículo:</strong> {formData.vehicleType}</Typography>
-                )}
                 {formData.description && (
                   <Typography><strong>Descripción:</strong> {formData.description}</Typography>
                 )}

@@ -389,11 +389,6 @@ class RouteService {
         return false
       }
       
-      // Filtrar por tipo de vehículo
-      if (filters.vehicleType && route.vehicleType !== filters.vehicleType) {
-        return false
-      }
-      
       return true
     })
   }

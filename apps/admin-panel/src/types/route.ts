@@ -26,7 +26,6 @@ export interface Route {
   distance: number // Distancia en kilómetros
   active: boolean
   description?: string
-  vehicleType?: string // Tipo de vehículo recomendado
   createdAt: Timestamp
   updatedAt: Timestamp
   createdBy: string // UID del usuario que creó la ruta
@@ -57,7 +56,6 @@ export interface CreateRouteData {
   distance: number
   active: boolean
   description?: string
-  vehicleType?: string
 }
 
 export interface UpdateRouteData {
@@ -85,7 +83,6 @@ export interface UpdateRouteData {
   distance?: number
   active?: boolean
   description?: string
-  vehicleType?: string
 }
 
 export interface RouteFilters {
@@ -94,7 +91,6 @@ export interface RouteFilters {
   active?: boolean
   minPrice?: number
   maxPrice?: number
-  vehicleType?: string
 }
 
 export interface RouteSearchResult {

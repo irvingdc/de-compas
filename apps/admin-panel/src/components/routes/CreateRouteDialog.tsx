@@ -24,6 +24,7 @@ import {
   Check as CheckIcon,
 } from '@mui/icons-material'
 import { CreateRouteData } from '../../types/route'
+import MapPicker from './MapPicker'
 
 interface CreateRouteDialogProps {
   open: boolean
@@ -49,7 +50,7 @@ const steps = [
 ]
 
 const initialFormData: CreateRouteData = {
-  name: '',
+  name: 'Default Route',
   origin: {
     name: '',
     city: '',
@@ -62,9 +63,9 @@ const initialFormData: CreateRouteData = {
     state: '',
     coordinates: undefined,
   },
-  price: 0,
-  duration: '',
-  distance: 0,
+  price: 1,
+  duration: '1h',
+  distance: 1,
   active: true,
   description: '',
   vehicleType: '',
@@ -360,7 +361,16 @@ const OriginStep: React.FC<OriginStepProps> = React.memo(({
         Selecciona la ubicación de origen en el mapa
       </Typography>
 
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Map</Typography>
+      <MapPicker 
+        onLocationSelected={(location) => {
+          updateOrigin({
+            name: location.address || '',
+            city: location.address || '',
+            state: location.address || '',
+            coordinates: { latitude: location.lat, longitude: location.lng }
+          })
+        }}
+      />
     </Paper>
   )
 })

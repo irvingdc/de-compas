@@ -353,13 +353,24 @@ const OriginStep: React.FC<OriginStepProps> = React.memo(({
   console.log('🎯 OriginStep rendered with:', { origin })
 
   const handleLocationSelected = useCallback((location: { lat: number; lng: number; address?: string }) => {
+    const addressParts = location.address?.split(',') || []
+    const city = addressParts.length > 1 ? addressParts[addressParts.length - 3]?.trim() : ''
+    const state = addressParts.length > 2 ? addressParts[addressParts.length - 2]?.trim() : ''
+    
     updateOrigin({
       name: location.address || '',
-      city: location.address || '',
-      state: location.address || '',
+      city: city || '',
+      state: state || '',
       coordinates: { latitude: location.lat, longitude: location.lng }
     })
   }, [updateOrigin])
+
+  const handleFieldChange = useCallback((field: keyof LocationData, value: string) => {
+    updateOrigin({
+      ...origin,
+      [field]: value
+    })
+  }, [origin, updateOrigin])
   
   return (
     <Paper elevation={0} sx={{ p: 3 }}>
@@ -367,12 +378,47 @@ const OriginStep: React.FC<OriginStepProps> = React.memo(({
         Punto de Origen
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Selecciona la ubicación de origen en el mapa
+        Completa los datos del origen y selecciona la ubicación en el mapa
       </Typography>
 
-      <MapPicker 
-        onLocationSelected={handleLocationSelected}
-      />
+      <Stack spacing={3}>
+        <TextField
+          fullWidth
+          label="Nombre del Punto de Origen"
+          value={origin.name}
+          onChange={(e) => handleFieldChange('name', e.target.value)}
+          required
+          placeholder="Ej: Terminal de Autobuses de Ciudad de México"
+        />
+
+        <Box display="flex" gap={2}>
+          <TextField
+            fullWidth
+            label="Ciudad"
+            value={origin.city}
+            onChange={(e) => handleFieldChange('city', e.target.value)}
+            required
+            placeholder="Ej: Ciudad de México"
+          />
+          <TextField
+            fullWidth
+            label="Estado"
+            value={origin.state}
+            onChange={(e) => handleFieldChange('state', e.target.value)}
+            required
+            placeholder="Ej: Ciudad de México"
+          />
+        </Box>
+
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Selecciona la ubicación exacta en el mapa:
+          </Typography>
+          <MapPicker 
+            onLocationSelected={handleLocationSelected}
+          />
+        </Box>
+      </Stack>
     </Paper>
   )
 })
@@ -387,6 +433,26 @@ const DestinationStep: React.FC<DestinationStepProps> = React.memo(({
   updateDestination,
 }) => {
   console.log('🎯 DestinationStep rendered with:', { destination })
+
+  const handleLocationSelected = useCallback((location: { lat: number; lng: number; address?: string }) => {
+    const addressParts = location.address?.split(',') || []
+    const city = addressParts.length > 1 ? addressParts[addressParts.length - 3]?.trim() : ''
+    const state = addressParts.length > 2 ? addressParts[addressParts.length - 2]?.trim() : ''
+    
+    updateDestination({
+      name: location.address || '',
+      city: city || '',
+      state: state || '',
+      coordinates: { latitude: location.lat, longitude: location.lng }
+    })
+  }, [updateDestination])
+
+  const handleFieldChange = useCallback((field: keyof LocationData, value: string) => {
+    updateDestination({
+      ...destination,
+      [field]: value
+    })
+  }, [destination, updateDestination])
   
   return (
     <Paper elevation={0} sx={{ p: 3 }}>
@@ -394,10 +460,47 @@ const DestinationStep: React.FC<DestinationStepProps> = React.memo(({
         Punto de Destino
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Selecciona la ubicación de destino en el mapa
+        Completa los datos del destino y selecciona la ubicación en el mapa
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Map</Typography>
 
+      <Stack spacing={3}>
+        <TextField
+          fullWidth
+          label="Nombre del Punto de Destino"
+          value={destination.name}
+          onChange={(e) => handleFieldChange('name', e.target.value)}
+          required
+          placeholder="Ej: Terminal de Autobuses de Guadalajara"
+        />
+
+        <Box display="flex" gap={2}>
+          <TextField
+            fullWidth
+            label="Ciudad"
+            value={destination.city}
+            onChange={(e) => handleFieldChange('city', e.target.value)}
+            required
+            placeholder="Ej: Guadalajara"
+          />
+          <TextField
+            fullWidth
+            label="Estado"
+            value={destination.state}
+            onChange={(e) => handleFieldChange('state', e.target.value)}
+            required
+            placeholder="Ej: Jalisco"
+          />
+        </Box>
+
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Selecciona la ubicación exacta en el mapa:
+          </Typography>
+          <MapPicker 
+            onLocationSelected={handleLocationSelected}
+          />
+        </Box>
+      </Stack>
     </Paper>
   )
 })

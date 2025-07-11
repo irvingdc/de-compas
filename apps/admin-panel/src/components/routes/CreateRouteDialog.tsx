@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   Button,
@@ -20,6 +19,7 @@ import {
   Tab,
   Card,
   CardContent,
+  IconButton,
 } from '@mui/material'
 import {
   Close as CloseIcon,
@@ -29,6 +29,7 @@ import {
 } from '@mui/icons-material'
 import { CreateRouteData } from '../../types/route'
 import LocationStep, { LocationData } from './LocationStep'
+import { ActionButton } from '../common/ReusableDialog'
 
 interface CreateRouteDialogProps {
   open: boolean
@@ -210,22 +211,35 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
       maxWidth="md"
       fullWidth
       disableEscapeKeyDown={loading}
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+          minHeight: 200,
+        }
+      }}
     >
-      <DialogTitle>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Crear Nueva Ruta</Typography>
-          <Button
+      {/* Header */}
+      <Box className="px-6 py-4 bg-neutral-100 dark:bg-dark-bg-hover">
+        <Box className="flex items-center justify-between">
+          <Typography 
+            variant="h5" 
+            component="h2"
+            className="font-bold text-brand-black dark:text-dark-text-primary"
+          >
+            Crear Nueva Ruta
+          </Typography>
+          <IconButton
             onClick={handleClose}
             disabled={loading}
-            color="inherit"
-            sx={{ minWidth: 'auto', p: 1 }}
+            size="small"
+            className="text-neutral-500 hover:text-neutral-700 dark:text-dark-text-secondary dark:hover:text-dark-text-primary"
           >
             <CloseIcon />
-          </Button>
+          </IconButton>
         </Box>
-      </DialogTitle>
+      </Box>
 
-      <DialogContent dividers>
+      <DialogContent className="px-6 py-4">
         <Box sx={{ mb: 3 }}>
           <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((label) => (
@@ -248,27 +262,33 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
         </Box>
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={handleClose} disabled={loading}>
-          Cancelar
-        </Button>
-        <Box sx={{ flex: 1 }} />
-        <Button
-          onClick={handleBack}
-          disabled={activeStep === 0 || loading}
-          startIcon={<ArrowBackIcon />}
-        >
-          Anterior
-        </Button>
-        <Button
-          onClick={handleNext}
-          disabled={!isStepValid(activeStep) || loading}
-          variant="contained"
-          endIcon={loading ? <CircularProgress size={20} /> : activeStep === steps.length - 1 ? <CheckIcon /> : <ArrowForwardIcon />}
-        >
-          {activeStep === steps.length - 1 ? 'Crear Ruta' : 'Siguiente'}
-        </Button>
-      </DialogActions>
+      {/* Footer */}
+      <Box className="px-6 py-2 bg-neutral-100 dark:bg-dark-bg-hover">
+        <DialogActions className="p-0" sx={{ justifyContent: 'space-between' }}>
+          <ActionButton variant="secondary" onClick={handleClose} disabled={loading}>
+            Cancelar
+          </ActionButton>
+          
+          <Box display="flex" gap={1}>
+            <ActionButton
+              variant="secondary"
+              onClick={handleBack}
+              disabled={activeStep === 0 || loading}
+              startIcon={<ArrowBackIcon />}
+            >
+              Anterior
+            </ActionButton>
+            <ActionButton
+              variant="primary"
+              onClick={handleNext}
+              disabled={!isStepValid(activeStep) || loading}
+              endIcon={loading ? <CircularProgress size={20} /> : activeStep === steps.length - 1 ? <CheckIcon /> : <ArrowForwardIcon />}
+            >
+              {activeStep === steps.length - 1 ? 'Crear Ruta' : 'Siguiente'}
+            </ActionButton>
+          </Box>
+        </DialogActions>
+      </Box>
     </Dialog>
   )
 }

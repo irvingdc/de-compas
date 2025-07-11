@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -44,7 +44,7 @@ const steps = [
 ]
 
 const initialFormData: CreateRouteData = {
-  name: 'Default Route',
+  name: '',
   origin: {
     name: '',
     city: '',
@@ -57,9 +57,9 @@ const initialFormData: CreateRouteData = {
     state: '',
     coordinates: undefined,
   },
-  price: 1,
-  duration: '1h',
-  distance: 1,
+  price: 0,
+  duration: '',
+  distance: 0,
   active: true,
   description: '',
 }
@@ -153,6 +153,69 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
     console.log('🎯 updateDestination called with:', destination)
     setFormData(prev => ({ ...prev, destination }))
   }, [])
+
+  // Calculate route distance and duration when both coordinates are available
+  const calculateRouteInfo = useCallback(async (origin: LocationData, destination: LocationData) => {
+    if (!origin.coordinates || !destination.coordinates) return
+
+    try {
+      const directionsService = new google.maps.DirectionsService()
+      
+      const result = await new Promise<google.maps.DirectionsResult>((resolve, reject) => {
+        directionsService.route(
+          {
+            origin: new google.maps.LatLng(origin.coordinates!.latitude, origin.coordinates!.longitude),
+            destination: new google.maps.LatLng(destination.coordinates!.latitude, destination.coordinates!.longitude),
+            travelMode: google.maps.TravelMode.DRIVING,
+            optimizeWaypoints: true,
+            avoidHighways: false,
+            avoidTolls: false,
+          },
+          (result, status) => {
+            if (status === 'OK' && result) {
+              resolve(result)
+            } else {
+              reject(new Error(`Error calculating route: ${status}`))
+            }
+          }
+        )
+      })
+
+      const route = result.routes[0]
+      const leg = route?.legs[0]
+      
+      if (leg) {
+        const distanceText = leg.distance?.text || ''
+        const durationText = leg.duration?.text || ''
+        
+        // Extract numeric distance (convert km to number)
+        const distanceMatch = distanceText.match(/(\d+(?:\.\d+)?)/);
+        const distance = distanceMatch ? parseFloat(distanceMatch[1]) : 0
+        
+        // Keep duration as text for user readability
+        const duration = durationText || '0 min'
+        
+        console.log('📍 Route calculated:', { distance, duration, distanceText, durationText })
+        
+        // Update form data with calculated values
+        setFormData(prev => ({
+          ...prev,
+          distance: distance,
+          duration: duration
+        }))
+      }
+    } catch (error) {
+      console.error('Error calculating route:', error)
+      // Don't show error to user, just log it
+    }
+  }, [])
+
+  // Auto-calculate route when destination is set and origin exists
+  useEffect(() => {
+    if (formData.origin.coordinates && formData.destination.coordinates) {
+      calculateRouteInfo(formData.origin, formData.destination)
+    }
+  }, [formData.origin.coordinates, formData.destination.coordinates, calculateRouteInfo])
 
   // Memoize step content to prevent unnecessary re-renders
   const stepContent = useMemo(() => {

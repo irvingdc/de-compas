@@ -30,6 +30,7 @@ import {
 import { CreateRouteData } from '../../types/route'
 import LocationStep, { LocationData } from './LocationStep'
 import { ActionButton } from '../common/ReusableDialog'
+import RoutePreviewMap from './RoutePreviewMap'
 
 interface CreateRouteDialogProps {
   open: boolean
@@ -459,13 +460,44 @@ const ReviewStep: React.FC<ReviewStepProps> = React.memo(({ formData }) => {
     </Box>
   )
 
-  const renderMapTab = () => (
-    <Box sx={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Typography variant="h6" color="text.secondary">
-        Vista de Mapa - Próximamente
-      </Typography>
-    </Box>
-  )
+  const renderMapTab = () => {
+    // Check if both origin and destination coordinates exist
+    const hasOriginCoords = formData.origin.coordinates
+    const hasDestinationCoords = formData.destination.coordinates
+    
+    if (!hasOriginCoords || !hasDestinationCoords) {
+      return (
+        <Box sx={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              Coordenadas Incompletas
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Para mostrar la vista previa de la ruta, primero completa las coordenadas del origen y destino en los pasos anteriores.
+            </Typography>
+          </Box>
+        </Box>
+      )
+    }
+
+    return (
+      <Box sx={{ width: '100%', mt: 2 }}>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Vista Previa de la Ruta
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Mapa con la trayectoria desde el origen hasta el destino
+          </Typography>
+        </Box>
+        
+        <RoutePreviewMap
+          startLocation={formData.origin.coordinates!}
+          endLocation={formData.destination.coordinates!}
+        />
+      </Box>
+    )
+  }
 
   return (
     <Paper elevation={0} sx={{ p: 3 }}>

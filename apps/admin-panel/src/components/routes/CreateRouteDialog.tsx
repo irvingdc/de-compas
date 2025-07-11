@@ -15,8 +15,6 @@ import {
   Divider,
   Alert,
   CircularProgress,
-  Tabs,
-  Tab,
   Card,
   CardContent,
   IconButton,
@@ -389,139 +387,115 @@ interface ReviewStepProps {
 }
 
 const ReviewStep: React.FC<ReviewStepProps> = React.memo(({ formData }) => {
-  const [activeTab, setActiveTab] = useState(0)
-
-  const handleTabChange = useCallback((_event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue)
-  }, [])
-
-  const renderInfoTab = () => (
-    <Box sx={{ width: '100%', mt: 2 }}>
-      <Box display="flex" gap={2} sx={{ flexWrap: 'wrap' }}>
-        {/* General Information Card */}
-        <Card elevation={3} sx={{ flex: 1, minWidth: 500 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom color="primary">
-              Información General
-            </Typography>
-            <Stack spacing={1}>
-              <Typography><strong>Nombre:</strong> {formData.name}</Typography>
-              <Typography><strong>Precio:</strong> ${formData.price} MXN</Typography>
-              <Typography><strong>Duración:</strong> {formData.duration}</Typography>
-              <Typography><strong>Distancia:</strong> {formData.distance} km</Typography>
-              {formData.vehicleType && (
-                <Typography><strong>Tipo de Vehículo:</strong> {formData.vehicleType}</Typography>
-              )}
-              {formData.description && (
-                <Typography><strong>Descripción:</strong> {formData.description}</Typography>
-              )}
-            </Stack>
-          </CardContent>
-        </Card>
-
-        {/* Origin Card */}
-        <Card elevation={3} sx={{ flex: 1, minWidth: 300 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom color="primary">
-              Punto de Origen
-            </Typography>
-            <Stack spacing={1}>
-              <Typography><strong>Nombre:</strong> {formData.origin.name}</Typography>
-              <Typography><strong>Ciudad:</strong> {formData.origin.city}</Typography>
-              <Typography><strong>Estado:</strong> {formData.origin.state}</Typography>
-              {formData.origin.coordinates && (
-                <Typography>
-                  <strong>Coordenadas:</strong> {formData.origin.coordinates.latitude.toFixed(6)}, {formData.origin.coordinates.longitude.toFixed(6)}
-                </Typography>
-              )}
-            </Stack>
-          </CardContent>
-        </Card>
-
-        {/* Destination Card */}
-        <Card elevation={3} sx={{ flex: 1, minWidth: 300 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom color="primary">
-              Punto de Destino
-            </Typography>
-            <Stack spacing={1}>
-              <Typography><strong>Nombre:</strong> {formData.destination.name}</Typography>
-              <Typography><strong>Ciudad:</strong> {formData.destination.city}</Typography>
-              <Typography><strong>Estado:</strong> {formData.destination.state}</Typography>
-              {formData.destination.coordinates && (
-                <Typography>
-                  <strong>Coordenadas:</strong> {formData.destination.coordinates.latitude.toFixed(6)}, {formData.destination.coordinates.longitude.toFixed(6)}
-                </Typography>
-              )}
-            </Stack>
-          </CardContent>
-        </Card>
-      </Box>
-    </Box>
-  )
-
-  const renderMapTab = () => {
-    // Check if both origin and destination coordinates exist
-    const hasOriginCoords = formData.origin.coordinates
-    const hasDestinationCoords = formData.destination.coordinates
-    
-    if (!hasOriginCoords || !hasDestinationCoords) {
-      return (
-        <Box sx={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              Coordenadas Incompletas
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Para mostrar la vista previa de la ruta, primero completa las coordenadas del origen y destino en los pasos anteriores.
-            </Typography>
-          </Box>
-        </Box>
-      )
-    }
-
-    return (
-      <Box sx={{ width: '100%', mt: 2 }}>
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Vista Previa de la Ruta
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Mapa con la trayectoria desde el origen hasta el destino
-          </Typography>
-        </Box>
-        
-        <RoutePreviewMap
-          startLocation={formData.origin.coordinates!}
-          endLocation={formData.destination.coordinates!}
-        />
-      </Box>
-    )
-  }
+  // Check if both origin and destination coordinates exist
+  const hasOriginCoords = formData.origin.coordinates
+  const hasDestinationCoords = formData.destination.coordinates
 
   return (
-    <Paper elevation={0} sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Revisar y Aprobar
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Revisa la información antes de crear la ruta
-      </Typography>
+    <Paper elevation={0} sx={{ p: 1 }}>
 
-      <Box sx={{ width: '100%' }}>
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          aria-label="review tabs"
-        >
-          <Tab label="Información" />
-          <Tab label="Mapa" />
-        </Tabs>
-        <Divider />
+      <Box display="flex" gap={3} sx={{ minHeight: 500 }}>
+        {/* Left Half - Information Cards */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+          {/* General Information Card */}
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom color="primary">
+                Información General
+              </Typography>
+              <Stack spacing={1}>
+                <Typography><strong>Nombre:</strong> {formData.name}</Typography>
+                <Typography><strong>Precio:</strong> ${formData.price} MXN</Typography>
+                <Typography><strong>Duración:</strong> {formData.duration}</Typography>
+                <Typography><strong>Distancia:</strong> {formData.distance} km</Typography>
+                {formData.vehicleType && (
+                  <Typography><strong>Tipo de Vehículo:</strong> {formData.vehicleType}</Typography>
+                )}
+                {formData.description && (
+                  <Typography><strong>Descripción:</strong> {formData.description}</Typography>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
 
-        <Box sx={{ minHeight: 300 }}>
-          {activeTab === 0 && renderInfoTab()}
-          {activeTab === 1 && renderMapTab()}
+          {/* Origin Card */}
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom color="primary">
+                Punto de Origen
+              </Typography>
+              <Stack spacing={1}>
+                <Typography><strong>Nombre:</strong> {formData.origin.name}</Typography>
+                <Typography><strong>Ciudad:</strong> {formData.origin.city}</Typography>
+                <Typography><strong>Estado:</strong> {formData.origin.state}</Typography>
+                {formData.origin.coordinates && (
+                  <Typography>
+                    <strong>Coordenadas:</strong> {formData.origin.coordinates.latitude.toFixed(6)}, {formData.origin.coordinates.longitude.toFixed(6)}
+                  </Typography>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+
+          {/* Destination Card */}
+          <Card elevation={3}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom color="primary">
+                Punto de Destino
+              </Typography>
+              <Stack spacing={1}>
+                <Typography><strong>Nombre:</strong> {formData.destination.name}</Typography>
+                <Typography><strong>Ciudad:</strong> {formData.destination.city}</Typography>
+                <Typography><strong>Estado:</strong> {formData.destination.state}</Typography>
+                {formData.destination.coordinates && (
+                  <Typography>
+                    <strong>Coordenadas:</strong> {formData.destination.coordinates.latitude.toFixed(6)}, {formData.destination.coordinates.longitude.toFixed(6)}
+                  </Typography>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+        </Box>
+
+        {/* Right Half - Map */}
+        <Box sx={{ flex: 1 }}>
+          {!hasOriginCoords || !hasDestinationCoords ? (
+            <Box sx={{ 
+              height: '100%', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              border: '2px dashed #ccc',
+              borderRadius: 2,
+              backgroundColor: 'background.paper'
+            }}>
+              <Box sx={{ textAlign: 'center', p: 3 }}>
+                <Typography variant="h6" color="text.secondary" gutterBottom>
+                  Vista Previa de la Ruta
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Para mostrar el mapa, completa las coordenadas del origen y destino en los pasos anteriores.
+                </Typography>
+              </Box>
+            </Box>
+          ) : (
+            <Box>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="h6" gutterBottom>
+                  Vista Previa de la Ruta
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Mapa con la trayectoria desde el origen hasta el destino
+                </Typography>
+              </Box>
+              
+              <RoutePreviewMap
+                startLocation={formData.origin.coordinates!}
+                endLocation={formData.destination.coordinates!}
+                mapHeight="400px"
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </Paper>

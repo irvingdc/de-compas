@@ -351,6 +351,15 @@ const OriginStep: React.FC<OriginStepProps> = React.memo(({
   updateOrigin,
 }) => {
   console.log('🎯 OriginStep rendered with:', { origin })
+
+  const handleLocationSelected = useCallback((location: { lat: number; lng: number; address?: string }) => {
+    updateOrigin({
+      name: location.address || '',
+      city: location.address || '',
+      state: location.address || '',
+      coordinates: { latitude: location.lat, longitude: location.lng }
+    })
+  }, [updateOrigin])
   
   return (
     <Paper elevation={0} sx={{ p: 3 }}>
@@ -362,14 +371,7 @@ const OriginStep: React.FC<OriginStepProps> = React.memo(({
       </Typography>
 
       <MapPicker 
-        onLocationSelected={(location) => {
-          updateOrigin({
-            name: location.address || '',
-            city: location.address || '',
-            state: location.address || '',
-            coordinates: { latitude: location.lat, longitude: location.lng }
-          })
-        }}
+        onLocationSelected={handleLocationSelected}
       />
     </Paper>
   )

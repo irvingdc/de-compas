@@ -78,7 +78,7 @@ const MapPicker: React.FC<MapPickerProps> = React.memo(({ onLocationSelected }) 
         }
     }, [onLocationSelected]);
 
-    const handleMapLoad = useCallback((map: google.maps.Map) => {
+    const handleMapLoad = useCallback((_map: google.maps.Map) => {
         // You can add any map initialization logic here
     }, []);
 

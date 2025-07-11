@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 interface MapPickerProps {
     onLocationSelected: (location: { lat: number; lng: number; address?: string }) => void;
+    defaultLocation?: { lat: number; lng: number; address?: string } | null;
 }
 
 // Memoize these static objects outside the component to prevent recreating them
@@ -47,9 +48,14 @@ const getAddressFromCoordinates = async (lat: number, lng: number): Promise<stri
     }
 };
 
-const MapPicker: React.FC<MapPickerProps> = React.memo(({ onLocationSelected }) => {
-    const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number; address?: string } | null>(null);
+const MapPicker: React.FC<MapPickerProps> = React.memo(({ onLocationSelected, defaultLocation }) => {
+    const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number; address?: string } | null>(defaultLocation || null);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Update selectedLocation when defaultLocation changes
+    useEffect(() => {
+        setSelectedLocation(defaultLocation || null);
+    }, [defaultLocation]);
 
     const handleMapClick = useCallback(async (event: google.maps.MapMouseEvent) => {
         if (event.latLng) {
@@ -104,8 +110,8 @@ const MapPicker: React.FC<MapPickerProps> = React.memo(({ onLocationSelected }) 
                 >
                     {selectedLocation && (
                         <Marker
-                            position={selectedLocation}
-                            animation={google.maps.Animation.DROP}
+                            key={`marker-${selectedLocation.lat}-${selectedLocation.lng}`}
+                            position={{ lat: selectedLocation.lat, lng: selectedLocation.lng }}
                         />
                     )}
                 </GoogleMap>

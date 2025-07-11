@@ -103,6 +103,11 @@ const LocationStep: React.FC<LocationStepProps> = React.memo(({
           </Typography>
           <MapPicker 
             onLocationSelected={handleLocationSelected}
+            defaultLocation={location.coordinates ? {
+              lat: location.coordinates.latitude,
+              lng: location.coordinates.longitude,
+              address: location.name
+            } : null}
           />
         </Box>
       </Stack>

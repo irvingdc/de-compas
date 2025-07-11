@@ -37,9 +37,9 @@ interface CreateRouteDialogProps {
 }
 
 const steps = [
-  'Información Principal',
   'Origen',
   'Destino',
+  'Información de la Ruta',
   'Revisar y Aprobar',
 ]
 
@@ -112,26 +112,26 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
 
   const isStepValid = useCallback((step: number): boolean => {
     switch (step) {
-      case 0: // Main Information
-        return !!(
-          formData.name &&
-          formData.price > 0 &&
-          formData.duration &&
-          formData.distance > 0
-        )
-      case 1: // Origin
+      case 0: // Origin
         return !!(
           formData.origin.name &&
           formData.origin.city &&
           formData.origin.state &&
           formData.origin.coordinates
         )
-      case 2: // Destination
+      case 1: // Destination
         return !!(
           formData.destination.name &&
           formData.destination.city &&
           formData.destination.state &&
           formData.destination.coordinates
+        )
+      case 2: // Main Information
+        return !!(
+          formData.name &&
+          formData.price > 0 &&
+          formData.duration &&
+          formData.distance > 0
         )
       case 3: // Review
         return isStepValid(0) && isStepValid(1) && isStepValid(2)
@@ -165,8 +165,6 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
 
     switch (activeStep) {
       case 0:
-        return <MainInformationStep formData={formData} updateFormData={updateFormData} />
-      case 1:
         return (
           <LocationStep
             key="origin-step"
@@ -181,7 +179,7 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
             }}
           />
         )
-      case 2:
+      case 1:
         return (
           <LocationStep
             key="destination-step"
@@ -196,6 +194,8 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
             }}
           />
         )
+      case 2:
+        return <MainInformationStep formData={formData} updateFormData={updateFormData} />
       case 3:
         return <ReviewStep formData={formData} />
       default:
@@ -305,7 +305,7 @@ const MainInformationStep: React.FC<MainInformationStepProps> = React.memo(({
   return (
     <Paper elevation={0} sx={{ p: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Información Principal
+        Información de la Ruta
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Ingresa los datos básicos de la ruta
@@ -392,7 +392,7 @@ const ReviewStep: React.FC<ReviewStepProps> = React.memo(({ formData }) => {
   const hasDestinationCoords = formData.destination.coordinates
 
   return (
-    <Paper elevation={0} sx={{ p: 1 }}>
+    <Paper elevation={0} sx={{ p: 2 }}>
 
       <Box display="flex" gap={3} sx={{ minHeight: 500 }}>
         {/* Left Half - Information Cards */}

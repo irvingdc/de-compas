@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from '@react-google-maps/api'
+import { GoogleMap, useLoadScript, DirectionsRenderer, Marker } from '@react-google-maps/api'
 import { Box, Typography, Alert, CircularProgress, SxProps, Theme } from '@mui/material'
 
 interface Coordinates {
@@ -32,6 +32,11 @@ const RoutePreviewMap: React.FC<RoutePreviewMapProps> = React.memo(({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [map, setMap] = useState<google.maps.Map | null>(null)
+
+  // Load Google Maps script
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
+  })
 
   const calculateRoute = useCallback(async () => {
     if (!startLocation || !endLocation) return
@@ -108,6 +113,9 @@ const RoutePreviewMap: React.FC<RoutePreviewMapProps> = React.memo(({
     borderRadius: '8px'
   }
 
+  if (loadError) return <div>Error loading maps</div>;
+  if (!isLoaded) return <div>Loading maps...</div>;
+
   return (
     <Box sx={{ width: '100%', ...sx }}>
       {error && (
@@ -117,58 +125,54 @@ const RoutePreviewMap: React.FC<RoutePreviewMapProps> = React.memo(({
       )}
 
       <Box sx={{ position: 'relative' }}>
-        <LoadScript
-          googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={center}
+          zoom={getZoomLevel()}
+          options={mapOptions}
+          onLoad={handleMapLoad}
         >
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={center}
-            zoom={getZoomLevel()}
-            options={mapOptions}
-            onLoad={handleMapLoad}
-          >
-            {/* Show markers if no route is calculated yet */}
-            {!directionsResult && !isLoading && (
-              <>
-                <Marker
-                  position={{
-                    lat: startLocation.latitude,
-                    lng: startLocation.longitude
-                  }}
-                  title="Punto de Origen"
-                  icon={{
-                    url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
-                  }}
-                />
-                <Marker
-                  position={{
-                    lat: endLocation.latitude,
-                    lng: endLocation.longitude
-                  }}
-                  title="Punto de Destino"
-                  icon={{
-                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                  }}
-                />
-              </>
-            )}
-
-            {/* Show the calculated route */}
-            {directionsResult && (
-              <DirectionsRenderer
-                directions={directionsResult}
-                options={{
-                  suppressMarkers: false,
-                  polylineOptions: {
-                    strokeColor: '#2563eb',
-                    strokeWeight: 5,
-                    strokeOpacity: 0.8,
-                  }
+          {/* Show markers if no route is calculated yet */}
+          {!directionsResult && !isLoading && (
+            <>
+              <Marker
+                position={{
+                  lat: startLocation.latitude,
+                  lng: startLocation.longitude
+                }}
+                title="Punto de Origen"
+                icon={{
+                  url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
                 }}
               />
-            )}
-          </GoogleMap>
-        </LoadScript>
+              <Marker
+                position={{
+                  lat: endLocation.latitude,
+                  lng: endLocation.longitude
+                }}
+                title="Punto de Destino"
+                icon={{
+                  url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                }}
+              />
+            </>
+          )}
+
+          {/* Show the calculated route */}
+          {directionsResult && (
+            <DirectionsRenderer
+              directions={directionsResult}
+              options={{
+                suppressMarkers: false,
+                polylineOptions: {
+                  strokeColor: '#2563eb',
+                  strokeWeight: 5,
+                  strokeOpacity: 0.8,
+                }
+              }}
+            />
+          )}
+        </GoogleMap>
 
         {/* Loading overlay */}
         {isLoading && (

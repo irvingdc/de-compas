@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 
 interface MapPickerProps {
     onLocationSelected: (location: { lat: number; lng: number; address?: string }) => void;
@@ -52,6 +52,11 @@ const MapPicker: React.FC<MapPickerProps> = React.memo(({ onLocationSelected, de
     const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number; address?: string } | null>(defaultLocation || null);
     const [isLoading, setIsLoading] = useState(false);
 
+    // Load Google Maps script
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
+    });
+
     // Update selectedLocation when defaultLocation changes
     useEffect(() => {
         setSelectedLocation(defaultLocation || null);
@@ -94,28 +99,26 @@ const MapPicker: React.FC<MapPickerProps> = React.memo(({ onLocationSelected, de
     // Memoize the map zoom to prevent unnecessary recalculations
     const mapZoom = useMemo(() => selectedLocation ? 15 : 10, [selectedLocation]);
 
+    if (loadError) return <div>Error loading maps</div>;
+    if (!isLoaded) return <div>Loading maps...</div>;
+
     return (
         <div className="w-full">
-
-            <LoadScript
-                googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}
+            <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={mapCenter}
+                zoom={mapZoom}
+                options={mapOptions}
+                onClick={handleMapClick}
+                onLoad={handleMapLoad}
             >
-                <GoogleMap
-                    mapContainerStyle={mapContainerStyle}
-                    center={mapCenter}
-                    zoom={mapZoom}
-                    options={mapOptions}
-                    onClick={handleMapClick}
-                    onLoad={handleMapLoad}
-                >
-                    {selectedLocation && (
-                        <Marker
-                            key={`marker-${selectedLocation.lat}-${selectedLocation.lng}`}
-                            position={{ lat: selectedLocation.lat, lng: selectedLocation.lng }}
-                        />
-                    )}
-                </GoogleMap>
-            </LoadScript>
+                {selectedLocation && (
+                    <Marker
+                        key={`marker-${selectedLocation.lat}-${selectedLocation.lng}`}
+                        position={{ lat: selectedLocation.lat, lng: selectedLocation.lng }}
+                    />
+                )}
+            </GoogleMap>
 
             {isLoading && (
                 <div className="mt-2 text-sm text-blue-600 dark:text-blue-400">

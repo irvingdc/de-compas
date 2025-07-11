@@ -16,6 +16,10 @@ import {
   Divider,
   Alert,
   CircularProgress,
+  Tabs,
+  Tab,
+  Card,
+  CardContent,
 } from '@mui/material'
 import {
   Close as CloseIcon,
@@ -67,7 +71,7 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
   onSubmit,
 }) => {
   console.log('📂 CreateRouteDialog rendered, open:', open)
-  
+
   const [activeStep, setActiveStep] = useState(0) // Fixed: should start at 0
   const [formData, setFormData] = useState<CreateRouteData>(initialFormData)
   const [loading, setLoading] = useState(false)
@@ -153,12 +157,12 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
 
   // Memoize step content to prevent unnecessary re-renders
   const stepContent = useMemo(() => {
-    console.log('🔄 Rendering step:', activeStep, { 
-      stepName: steps[activeStep], 
+    console.log('🔄 Rendering step:', activeStep, {
+      stepName: steps[activeStep],
       formDataOrigin: formData.origin,
-      formDataDestination: formData.destination 
+      formDataDestination: formData.destination
     })
-    
+
     switch (activeStep) {
       case 0:
         return <MainInformationStep formData={formData} updateFormData={updateFormData} />
@@ -239,7 +243,7 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
         )}
 
         <Box sx={{ minHeight: 400 }}>
-          
+
           {stepContent}
         </Box>
       </DialogContent>
@@ -364,6 +368,85 @@ interface ReviewStepProps {
 }
 
 const ReviewStep: React.FC<ReviewStepProps> = React.memo(({ formData }) => {
+  const [activeTab, setActiveTab] = useState(0)
+
+  const handleTabChange = useCallback((_event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue)
+  }, [])
+
+  const renderInfoTab = () => (
+    <Box sx={{ width: '100%', mt: 2 }}>
+      <Box display="flex" gap={2} sx={{ flexWrap: 'wrap' }}>
+        {/* General Information Card */}
+        <Card elevation={3} sx={{ flex: 1, minWidth: 500 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom color="primary">
+              Información General
+            </Typography>
+            <Stack spacing={1}>
+              <Typography><strong>Nombre:</strong> {formData.name}</Typography>
+              <Typography><strong>Precio:</strong> ${formData.price} MXN</Typography>
+              <Typography><strong>Duración:</strong> {formData.duration}</Typography>
+              <Typography><strong>Distancia:</strong> {formData.distance} km</Typography>
+              {formData.vehicleType && (
+                <Typography><strong>Tipo de Vehículo:</strong> {formData.vehicleType}</Typography>
+              )}
+              {formData.description && (
+                <Typography><strong>Descripción:</strong> {formData.description}</Typography>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* Origin Card */}
+        <Card elevation={3} sx={{ flex: 1, minWidth: 300 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom color="primary">
+              Punto de Origen
+            </Typography>
+            <Stack spacing={1}>
+              <Typography><strong>Nombre:</strong> {formData.origin.name}</Typography>
+              <Typography><strong>Ciudad:</strong> {formData.origin.city}</Typography>
+              <Typography><strong>Estado:</strong> {formData.origin.state}</Typography>
+              {formData.origin.coordinates && (
+                <Typography>
+                  <strong>Coordenadas:</strong> {formData.origin.coordinates.latitude.toFixed(6)}, {formData.origin.coordinates.longitude.toFixed(6)}
+                </Typography>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* Destination Card */}
+        <Card elevation={3} sx={{ flex: 1, minWidth: 300 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom color="primary">
+              Punto de Destino
+            </Typography>
+            <Stack spacing={1}>
+              <Typography><strong>Nombre:</strong> {formData.destination.name}</Typography>
+              <Typography><strong>Ciudad:</strong> {formData.destination.city}</Typography>
+              <Typography><strong>Estado:</strong> {formData.destination.state}</Typography>
+              {formData.destination.coordinates && (
+                <Typography>
+                  <strong>Coordenadas:</strong> {formData.destination.coordinates.latitude.toFixed(6)}, {formData.destination.coordinates.longitude.toFixed(6)}
+                </Typography>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+      </Box>
+    </Box>
+  )
+
+  const renderMapTab = () => (
+    <Box sx={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Typography variant="h6" color="text.secondary">
+        Vista de Mapa - Próximamente
+      </Typography>
+    </Box>
+  )
+
   return (
     <Paper elevation={0} sx={{ p: 3 }}>
       <Typography variant="h6" gutterBottom>
@@ -373,57 +456,22 @@ const ReviewStep: React.FC<ReviewStepProps> = React.memo(({ formData }) => {
         Revisa la información antes de crear la ruta
       </Typography>
 
-      <Stack spacing={3}>
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Información General
-          </Typography>
-          <Box sx={{ mb: 2 }}>
-            <Typography><strong>Nombre:</strong> {formData.name}</Typography>
-            <Typography><strong>Precio:</strong> ${formData.price} MXN</Typography>
-            <Typography><strong>Duración:</strong> {formData.duration}</Typography>
-            <Typography><strong>Distancia:</strong> {formData.distance} km</Typography>
-            {formData.vehicleType && (
-              <Typography><strong>Tipo de Vehículo:</strong> {formData.vehicleType}</Typography>
-            )}
-            {formData.description && (
-              <Typography><strong>Descripción:</strong> {formData.description}</Typography>
-            )}
-          </Box>
-        </Box>
-
+      <Box sx={{ width: '100%' }}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          aria-label="review tabs"
+        >
+          <Tab label="Información" />
+          <Tab label="Mapa" />
+        </Tabs>
         <Divider />
 
-        <Box display="flex" gap={4}>
-          <Box flex={1}>
-            <Typography variant="h6" gutterBottom>
-              Origen
-            </Typography>
-            <Typography><strong>Nombre:</strong> {formData.origin.name}</Typography>
-            <Typography><strong>Ciudad:</strong> {formData.origin.city}</Typography>
-            <Typography><strong>Estado:</strong> {formData.origin.state}</Typography>
-            {formData.origin.coordinates && (
-              <Typography>
-                <strong>Coordenadas:</strong> {formData.origin.coordinates.latitude.toFixed(6)}, {formData.origin.coordinates.longitude.toFixed(6)}
-              </Typography>
-            )}
-          </Box>
-
-          <Box flex={1}>
-            <Typography variant="h6" gutterBottom>
-              Destino
-            </Typography>
-            <Typography><strong>Nombre:</strong> {formData.destination.name}</Typography>
-            <Typography><strong>Ciudad:</strong> {formData.destination.city}</Typography>
-            <Typography><strong>Estado:</strong> {formData.destination.state}</Typography>
-            {formData.destination.coordinates && (
-              <Typography>
-                <strong>Coordenadas:</strong> {formData.destination.coordinates.latitude.toFixed(6)}, {formData.destination.coordinates.longitude.toFixed(6)}
-              </Typography>
-            )}
-          </Box>
+        <Box sx={{ minHeight: 300 }}>
+          {activeTab === 0 && renderInfoTab()}
+          {activeTab === 1 && renderMapTab()}
         </Box>
-      </Stack>
+      </Box>
     </Paper>
   )
 }) 

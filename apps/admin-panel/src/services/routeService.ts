@@ -137,12 +137,8 @@ class RouteService {
         constraints.push(startAfter(lastDoc))
       }
 
-      console.log('Ejecutando consulta de rutas con:', { filters, pageSize })
-      
       const q = query(this.getCollection(), ...constraints)
       const querySnapshot = await getDocs(q)
-
-      console.log('Consulta exitosa, documentos encontrados:', querySnapshot.size)
 
       let routes: Route[] = []
       const docs: DocumentSnapshot[] = []

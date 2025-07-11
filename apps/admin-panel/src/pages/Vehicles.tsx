@@ -75,7 +75,6 @@ export const Vehicles: React.FC = () => {
   const handleEdit = (vehicle: Vehicle) => {
     setSelectedVehicle(vehicle)
     // TODO: Implementar edición
-    console.log('Edit vehicle:', vehicle)
   }
 
   const handleDelete = (vehicle: Vehicle) => {

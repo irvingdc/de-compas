@@ -37,8 +37,6 @@ const LocationStep: React.FC<LocationStepProps> = React.memo(({
   updateLocation,
   placeholders,
 }) => {
-  console.log(`🎯 ${title} rendered with:`, { location })
-
   const handleLocationSelected = useCallback((mapLocation: { lat: number; lng: number; address?: string }) => {
     const addressParts = mapLocation.address?.split(',') || []
     const city = addressParts.length > 1 ? addressParts[addressParts.length - 3]?.trim() : ''

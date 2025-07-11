@@ -21,12 +21,10 @@ class ImageService {
       const imageRef = ref(storage, `vehicles/${fileName}`)
 
       // Subir archivo
-      console.log('Subiendo imagen de vehículo:', fileName)
       const snapshot = await uploadBytes(imageRef, file)
       
       // Obtener URL de descarga
       const downloadURL = await getDownloadURL(snapshot.ref)
-      console.log('Imagen subida exitosamente:', downloadURL)
       
       return downloadURL
     } catch (error) {
@@ -42,8 +40,7 @@ class ImageService {
     try {
       // Extraer la referencia desde la URL
       const imageRef = ref(storage, imageUrl)
-      await deleteObject(imageRef)
-      console.log('Imagen eliminada exitosamente:', imageUrl)
+          await deleteObject(imageRef)
     } catch (error) {
       console.error('Error eliminando imagen:', error)
       // No lanzar error si la imagen no existe

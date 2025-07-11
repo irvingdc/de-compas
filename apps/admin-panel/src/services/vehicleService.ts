@@ -147,12 +147,8 @@ class VehicleService {
         constraints.push(startAfter(lastDoc))
       }
 
-      console.log('Ejecutando consulta de vehículos con:', { filters, pageSize })
-      
       const q = query(this.getCollection(), ...constraints)
       const querySnapshot = await getDocs(q)
-
-      console.log('Consulta exitosa, documentos encontrados:', querySnapshot.size)
 
       let vehicles: Vehicle[] = []
       const docs: DocumentSnapshot[] = []

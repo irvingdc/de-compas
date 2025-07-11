@@ -84,7 +84,6 @@ export const DynamicPricing: React.FC = () => {
 
   const handleSaveSettings = () => {
     // Aquí iría la lógica para guardar configuraciones
-    console.log('Configuraciones guardadas')
   }
 
   const potentialIncrease = routeConfigs.reduce((sum, route) => sum + (route.currentPrice - route.basePrice), 0)

@@ -73,8 +73,6 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
   editRoute,
   onUpdate,
 }) => {
-  console.log('📂 CreateRouteDialog rendered, open:', open, 'editRoute:', editRoute)
-
   const [activeStep, setActiveStep] = useState(0) // Fixed: should start at 0
   const [formData, setFormData] = useState<CreateRouteData>(initialFormData)
   const [loading, setLoading] = useState(false)
@@ -175,12 +173,10 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
   }, [])
 
   const updateOrigin = useCallback((origin: LocationData) => {
-    console.log('🎯 updateOrigin called with:', origin)
     setFormData(prev => ({ ...prev, origin }))
   }, [])
 
   const updateDestination = useCallback((destination: LocationData) => {
-    console.log('🎯 updateDestination called with:', destination)
     setFormData(prev => ({ ...prev, destination }))
   }, [])
 
@@ -226,8 +222,6 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
         // Keep duration as text for user readability
         const duration = durationText || '0 min'
         
-        console.log('📍 Route calculated:', { distance, duration, distanceText, durationText })
-        
         // Update form data with calculated values
         setFormData(prev => ({
           ...prev,
@@ -250,12 +244,6 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
 
   // Memoize step content to prevent unnecessary re-renders
   const stepContent = useMemo(() => {
-    console.log('🔄 Rendering step:', activeStep, {
-      stepName: steps[activeStep],
-      formDataOrigin: formData.origin,
-      formDataDestination: formData.destination
-    })
-
     switch (activeStep) {
       case 0:
         return (

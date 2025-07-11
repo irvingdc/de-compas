@@ -78,7 +78,6 @@ export const Drivers: React.FC = () => {
 
   const handleEditDriver = (driver: Driver) => {
     // TODO: Implementar edición
-    console.log('Edit driver:', driver.id)
   }
 
   const handleDeleteDriverLocal = (driver: Driver) => {

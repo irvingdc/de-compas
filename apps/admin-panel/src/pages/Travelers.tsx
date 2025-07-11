@@ -61,7 +61,6 @@ export const Travelers: React.FC = () => {
 
   const handleEditTraveler = (traveler: Traveler) => {
     // TODO: Implementar edición
-    console.log('Edit traveler:', traveler.id)
   }
 
   const handleEditTravelerById = (id: string) => {

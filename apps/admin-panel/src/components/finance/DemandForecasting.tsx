@@ -148,12 +148,10 @@ export const DemandForecasting: React.FC = () => {
 
   const handleRefreshData = () => {
     // Aquí iría la lógica para actualizar los datos
-    console.log('Actualizando datos de predicción...')
   }
 
   const handleExportData = () => {
     // Aquí iría la lógica para exportar los datos
-    console.log('Exportando datos de predicción...')
   }
 
   const averageConfidence = routeAnalysisData.reduce((sum, route) => sum + route.confidence, 0) / routeAnalysisData.length

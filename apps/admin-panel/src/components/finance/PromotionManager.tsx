@@ -175,7 +175,6 @@ export const PromotionManager: React.FC = () => {
 
   const handleSavePromotion = () => {
     // Aquí iría la lógica para guardar la promoción
-    console.log('Promoción guardada:', promotionForm)
     setPromotionDialog(false)
   }
 

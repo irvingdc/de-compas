@@ -86,6 +86,12 @@ service cloud.firestore {
       allow update: if isAdmin(); // Only admin can update (resolve) support requests
     }
 
+    // TERMS_AND_CONDITIONS collection
+    match /terms_and_conditions/{termsId} {
+      allow read: if isAuthenticated(); // All authenticated users can read terms
+      allow write: if isAdmin(); // Only admin can upload new versions
+    }
+
     // AUDIT_LOG collection
     match /audit_log/{logId} {
       allow read: if isAdmin();

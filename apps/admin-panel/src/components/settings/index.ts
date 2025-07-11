@@ -1,0 +1,1 @@
+export { TermsAndConditionsManager } from './TermsAndConditionsManager' 

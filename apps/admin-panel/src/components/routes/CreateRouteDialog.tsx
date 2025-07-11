@@ -170,6 +170,7 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
             optimizeWaypoints: true,
             avoidHighways: false,
             avoidTolls: false,
+            language: 'es',
           },
           (result, status) => {
             if (status === 'OK' && result) {

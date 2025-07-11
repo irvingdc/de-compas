@@ -28,7 +28,7 @@ interface RouteTableProps {
   onView: (route: Route) => void
   onEdit: (route: Route) => void
   onDelete: (route: Route) => void
-  onToggleStatus: (routeId: string, currentStatus: boolean) => void
+  onToggleStatus: (route: Route) => void
   onChangePage: (event: unknown, newPage: number) => void
   onChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
 }

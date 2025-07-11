@@ -26,7 +26,7 @@ interface RouteRowProps {
   onView: (route: Route) => void
   onEdit: (route: Route) => void
   onDelete: (route: Route) => void
-  onToggleStatus: (routeId: string, currentStatus: boolean) => void
+  onToggleStatus: (route: Route) => void
 }
 
 export const RouteRow: React.FC<RouteRowProps> = ({
@@ -144,7 +144,7 @@ export const RouteRow: React.FC<RouteRowProps> = ({
               size="small"
               onClick={(e) => {
                 e.stopPropagation()
-                onToggleStatus(route.id, route.active)
+                onToggleStatus(route)
               }}
             >
               {route.active ? (

@@ -85,6 +85,12 @@ export const Routes: React.FC = () => {
     setDeleteDialogOpen(true)
   }
 
+  const handleToggleStatusAction = (route: Route) => {
+    setSelectedRoute(route)
+    setStatusAction(route.active ? 'deactivate' : 'activate')
+    setStatusDialogOpen(true)
+  }
+
   const handleDeleteSelected = () => {
     setDeleteDialogOpen(true)
   }
@@ -108,10 +114,14 @@ export const Routes: React.FC = () => {
   }
 
   const handleStatusConfirm = () => {
-    if (statusAction === 'activate') {
-      handleActivateMultiple()
-    } else {
-      handleDeactivateMultiple()
+    if (selected.length > 0) {
+      if (statusAction === 'activate') {
+        handleActivateMultiple()
+      } else {
+        handleDeactivateMultiple()
+      }
+    } else if (selectedRoute) {
+      handleToggleStatus(selectedRoute.id, selectedRoute.active)
     }
   }
 
@@ -174,7 +184,7 @@ export const Routes: React.FC = () => {
         onView={handleView}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        onToggleStatus={handleToggleStatus}
+        onToggleStatus={handleToggleStatusAction}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />

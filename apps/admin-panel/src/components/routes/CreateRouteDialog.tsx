@@ -25,7 +25,7 @@ import {
   ArrowForward as ArrowForwardIcon,
   Check as CheckIcon,
 } from '@mui/icons-material'
-import { CreateRouteData } from '../../types/route'
+import { CreateRouteData, Route, UpdateRouteData } from '../../types/route'
 import LocationStep, { LocationData } from './LocationStep'
 import { ActionButton } from '../common/ReusableDialog'
 import RoutePreviewMap from './RoutePreviewMap'
@@ -34,6 +34,8 @@ interface CreateRouteDialogProps {
   open: boolean
   onClose: () => void
   onSubmit: (data: CreateRouteData) => Promise<void>
+  editRoute?: Route | null
+  onUpdate?: (routeId: string, data: UpdateRouteData) => Promise<void>
 }
 
 const steps = [
@@ -68,13 +70,35 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
   open,
   onClose,
   onSubmit,
+  editRoute,
+  onUpdate,
 }) => {
-  console.log('📂 CreateRouteDialog rendered, open:', open)
+  console.log('📂 CreateRouteDialog rendered, open:', open, 'editRoute:', editRoute)
 
   const [activeStep, setActiveStep] = useState(0) // Fixed: should start at 0
   const [formData, setFormData] = useState<CreateRouteData>(initialFormData)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const isEditMode = !!editRoute
+
+  // Initialize form data when editing
+  useEffect(() => {
+    if (editRoute) {
+      setFormData({
+        name: editRoute.name,
+        origin: editRoute.origin,
+        destination: editRoute.destination,
+        price: editRoute.price,
+        duration: editRoute.duration,
+        distance: editRoute.distance,
+        active: editRoute.active,
+        description: editRoute.description || '',
+      })
+    } else {
+      setFormData(initialFormData)
+    }
+  }, [editRoute])
 
   const handleClose = useCallback(() => {
     if (loading) return
@@ -100,14 +124,20 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
     try {
       setLoading(true)
       setError(null)
-      await onSubmit(formData)
+      
+      if (isEditMode && editRoute && onUpdate) {
+        await onUpdate(editRoute.id, formData)
+      } else {
+        await onSubmit(formData)
+      }
+      
       handleClose()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la ruta')
+      setError(err instanceof Error ? err.message : `Error al ${isEditMode ? 'actualizar' : 'crear'} la ruta`)
     } finally {
       setLoading(false)
     }
-  }, [formData, onSubmit, handleClose])
+  }, [formData, onSubmit, onUpdate, editRoute, isEditMode, handleClose])
 
   const isStepValid = useCallback((step: number): boolean => {
     switch (step) {
@@ -288,7 +318,7 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
             component="h2"
             className="font-bold text-brand-black dark:text-dark-text-primary"
           >
-            Crear Nueva Ruta
+            {isEditMode ? 'Editar Ruta' : 'Crear Nueva Ruta'}
           </Typography>
           <IconButton
             onClick={handleClose}
@@ -346,7 +376,7 @@ export const CreateRouteDialog: React.FC<CreateRouteDialogProps> = ({
               disabled={!isStepValid(activeStep) || loading}
               endIcon={loading ? <CircularProgress size={20} /> : activeStep === steps.length - 1 ? <CheckIcon /> : <ArrowForwardIcon />}
             >
-              {activeStep === steps.length - 1 ? 'Crear Ruta' : 'Siguiente'}
+              {activeStep === steps.length - 1 ? (isEditMode ? 'Actualizar Ruta' : 'Crear Ruta') : 'Siguiente'}
             </ActionButton>
           </Box>
         </DialogActions>

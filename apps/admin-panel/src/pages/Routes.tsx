@@ -35,6 +35,7 @@ export const Routes: React.FC = () => {
     searchTerm,
     showFilters,
     createDialogOpen,
+    editDialogOpen,
     deleteDialogOpen,
     viewDialogOpen,
     statusDialogOpen,
@@ -45,6 +46,7 @@ export const Routes: React.FC = () => {
     // Acciones
     handleSearch,
     handleCreateRoute,
+    handleUpdateRoute,
     handleToggleStatus,
     handleDeleteRoute,
     handleDeleteMultiple,
@@ -58,6 +60,7 @@ export const Routes: React.FC = () => {
     setSearchTerm,
     setShowFilters,
     setCreateDialogOpen,
+    setEditDialogOpen,
     setDeleteDialogOpen,
     setViewDialogOpen,
     setStatusDialogOpen,
@@ -74,8 +77,7 @@ export const Routes: React.FC = () => {
 
   const handleEdit = (route: Route) => {
     setSelectedRoute(route)
-    // TODO: Implementar edición
-    console.log('Edit route:', route)
+    setEditDialogOpen(true)
   }
 
   const handleDelete = (route: Route) => {
@@ -201,6 +203,15 @@ export const Routes: React.FC = () => {
         open={createDialogOpen}
         onClose={() => setCreateDialogOpen(false)}
         onSubmit={handleCreateRoute}
+      />
+
+      {/* Diálogo de Editar Ruta */}
+      <CreateRouteDialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        onSubmit={handleCreateRoute}
+        editRoute={selectedRoute}
+        onUpdate={handleUpdateRoute}
       />
 
       {/* Diálogo de Detalles de Ruta */}

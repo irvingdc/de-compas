@@ -42,6 +42,7 @@ export interface UseRoutesActions {
   loadRoutes: () => Promise<void>
   handleSearch: () => Promise<void>
   handleCreateRoute: (data: import('../../types/route').CreateRouteData) => Promise<void>
+  handleUpdateRoute: (routeId: string, data: import('../../types/route').UpdateRouteData) => Promise<void>
   handleToggleStatus: (routeId: string, currentStatus: boolean) => Promise<void>
   handleDeleteRoute: (routeId: string) => Promise<void>
   handleDeleteMultiple: () => Promise<void>
@@ -160,6 +161,17 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
       setCreateDialogOpen(false)
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Error al crear ruta')
+    }
+  }
+
+  const handleUpdateRoute = async (routeId: string, data: import('../../types/route').UpdateRouteData) => {
+    try {
+      await routeService.updateRoute(routeId, data)
+      loadRoutes()
+      showSnackbar('Ruta actualizada exitosamente', 'success')
+      setEditDialogOpen(false)
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Error al actualizar ruta')
     }
   }
 
@@ -295,6 +307,7 @@ export const useRoutes = (): UseRoutesState & UseRoutesActions => {
     loadRoutes,
     handleSearch,
     handleCreateRoute,
+    handleUpdateRoute,
     handleToggleStatus,
     handleDeleteRoute,
     handleDeleteMultiple,

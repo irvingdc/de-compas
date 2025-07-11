@@ -417,11 +417,9 @@ export const TermsAndConditionsManager: React.FC<TermsAndConditionsManagerProps>
                       </Box>
                       
                       {term.description && (
-                        <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1, mb: 2 }}>
-                          <Typography variant="body2" color="text.secondary">
-                            <strong>Descripción:</strong> {term.description}
-                          </Typography>
-                        </Box>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                          <strong>Descripción:</strong> {term.description}
+                        </Typography>
                       )}
                     </Box>
                     
